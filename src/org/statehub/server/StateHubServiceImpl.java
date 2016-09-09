@@ -68,17 +68,17 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 	}
 	
 	
-	ArrayList<State> getStatesForModel()
+	ArrayList<State> getStatesForModel(int id)
 	{
 		return null;
 	}
 	
-	Tags getTagsforID()
+	Tags getTagsforID(int id)
 	{
 		return null;
 	}
 	
-	ArrayList<Feature> getFeaturesForState()
+	ArrayList<Feature> getFeaturesForState(int id)
 	{
 		return null;
 	}
