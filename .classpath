@@ -4,5 +4,9 @@
 	<classpathentry kind="src" output="test-classes" path="test"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/gwt-2.8.0-rc1"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt4-chart.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt4-theme-triton.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt4.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/mysql-connector-java-5.1.14-bin.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
