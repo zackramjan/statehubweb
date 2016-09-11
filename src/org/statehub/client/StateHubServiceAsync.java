@@ -11,5 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface StateHubServiceAsync
 {
-		void getAll(AsyncCallback<ArrayList<Model>> callback);
+		void getModel(String search, AsyncCallback<ArrayList<Model>> callback);
+		void StoreModel(Model m, AsyncCallback<Integer> callback);
 }
