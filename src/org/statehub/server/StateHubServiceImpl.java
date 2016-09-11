@@ -13,6 +13,7 @@ import org.statehub.client.data.Model;
 import org.statehub.client.data.State;
 import org.statehub.client.data.Tags;
 
+import com.google.gson.Gson;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mysql.jdbc.Statement;
 
@@ -326,7 +327,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 	}
 
 	@Override
-	public Integer StoreModel(Model m)
+	public Integer storeModel(Model m)
 	{
 		int model_id = insertModelRow(m.getName(),m.getAuthor(),m.getRevision(),m.getDescription());
 		for(String t1 : m.getTags())
@@ -345,5 +346,19 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			}
 		}
 		return model_id;
+	}
+
+	@Override
+	public String toJson(Model m)
+	{
+		Gson gson = new Gson();
+		return gson.toJson(m);
+	}
+
+	@Override
+	public Model fromJason(String s)
+	{
+		Gson gson = new Gson();
+		return gson.fromJson(s,Model.class);
 	}
 }

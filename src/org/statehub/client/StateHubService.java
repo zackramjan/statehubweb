@@ -13,5 +13,7 @@ import org.statehub.client.data.*;
 public interface StateHubService extends RemoteService
 {
 	ArrayList<Model> getModel(String search);
-	Integer StoreModel(Model m);
+	Integer storeModel(Model m);
+	String toJson(Model m);
+	Model fromJason(String s);
 }

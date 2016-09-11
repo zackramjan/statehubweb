@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt4-theme-triton.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mysql-connector-java-5.1.14-bin.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gson-2.7.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
