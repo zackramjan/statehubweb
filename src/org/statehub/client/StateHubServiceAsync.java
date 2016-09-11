@@ -12,5 +12,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface StateHubServiceAsync
 {
 		void getModel(String search, AsyncCallback<ArrayList<Model>> callback);
-		void StoreModel(Model m, AsyncCallback<Integer> callback);
+		void storeModel(Model m, AsyncCallback<Integer> callback);
+		void toJson(Model m, AsyncCallback<String> callback);
+		void fromJason(String s, AsyncCallback<Model> callback);
 }
