@@ -12,5 +12,6 @@ import org.statehub.client.data.*;
 @RemoteServiceRelativePath("greet")
 public interface StateHubService extends RemoteService
 {
-	ArrayList<Model> getAll();
+	ArrayList<Model> getModel(String search);
+	Integer StoreModel(Model m);
 }
