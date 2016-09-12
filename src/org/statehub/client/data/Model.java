@@ -2,6 +2,7 @@ package org.statehub.client.data;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Model implements Serializable
 {
@@ -70,5 +71,71 @@ public class Model implements Serializable
 		this.author = author;
 	}
 	
-
+	public void parseFromString(String s)
+	{
+		
+		String[] lines = s.split("[\r\n]+");
+		this.setName(lines[0]);
+		this.setAuthor(lines[1]);
+		this.setDescription(lines[2]);
+		this.setRevision(new Timestamp(new Date().getTime()));
+		String[] features = lines[4].trim().split("\\s+");
+		
+		this.states = new ArrayList<State>();
+		for(int i=5;i<lines.length;i++)
+		{
+			String stateDescription = "";
+			Tags stateTags = new Tags();
+			String[] stateTokens = lines[i].split("\\s");
+			
+			State myState = new State();
+			myState.setName(stateTokens[0]);
+			myState.setOrder(i-4);
+			ArrayList<Feature> stateFeatures = new ArrayList<Feature>();
+			
+			for (int j = 1;j<stateTokens.length;j++)				
+			{
+				if(j<=features.length)
+				{
+					Feature f = new Feature();
+					f.setName(features[j-1]);
+					f.setOrder(j);
+					f.setScore(stateTokens[j].equals("NA") ? -1 : Float.valueOf(stateTokens[j]));
+					stateFeatures.add(f);
+				}
+				else
+				{
+					stateTags.add(stateTokens[j]);
+					stateDescription += " " +  stateTokens[j];
+				}
+			}
+			
+			myState.setFeatures(stateFeatures);
+			myState.setTags(stateTags);
+			myState.setDescription(stateDescription);
+			this.states.add(myState);
+		}
+	}
+	
+	public String toString()
+	{
+		String ret = this.getName() + "\n";
+		ret += this.getRevision().toString() + "\n";
+		ret += this.getAuthor() + "\n";
+		ret += this.getDescription() + "\n";
+		String featureHeader = "";
+		for (Feature f : this.getStates().get(0).getFeatures() )
+			featureHeader += f.getName() + "\t";
+		ret+= featureHeader + "\n";
+		for (State s : this.getStates())
+		{
+			String stateRow = "";
+			stateRow += s.getName() + "\t";
+			for (Feature f : s.getFeatures())
+				stateRow += f.getScore() + "\t";
+			ret += stateRow + s.getDescription() + "\n";
+		}
+		
+		return ret;
+	}
 }

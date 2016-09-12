@@ -68,7 +68,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		{
 			if (myConnection != null)
 			{
-				String queryString = "select * from state where model_id=? order by order ASC";
+				String queryString = "select * from state where model_id=?";
 				PreparedStatement query = myConnection.prepareStatement(queryString);
 				query.setInt(1, model_id);
 				
@@ -102,7 +102,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		{
 			if (myConnection != null)
 			{
-				String queryString = "select f.name,s.score, s.id from state_features s inner join features f on s.feature_id = f.id where s.state_id=? order by order ASC";
+				String queryString = "select f.name,s.score, s.id from state_features s inner join features f on s.feature_id = f.id where s.state_id=? order by s.order ASC";
 				PreparedStatement query = myConnection.prepareStatement(queryString);
 				query.setInt(1, state_id);
 				
