@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.statehub.client.StateHubService;
@@ -286,7 +287,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 	
 	Integer insertStateFeatureScoreRow(int state_id,int feature_id,int order,float score)
 	{
-		System.err.println("inserting Feature: "  + score);
+		System.err.println("inserting Feature Score: "  + score);
 		java.sql.Connection myConnection = getConnection();
 		Integer ret = 0;
 		try
@@ -314,9 +315,9 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		return ret;
 	}
 	
-	Integer insertTagRow(Integer model_id,Integer state_id,Integer feature_id, String tag)
+	Integer insertTagRow(Integer model_id,Integer state_id,Integer feature_id, Tags tags)
 	{
-		System.err.println("inserting tag: " + tag);
+		System.err.println("inserting " + tags.size() + " tags");
 		java.sql.Connection myConnection = getConnection();
 		Integer ret = 0;
 		try
@@ -325,15 +326,16 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			{
 				String queryString = "insert into tags (model_id,state_id,feature_id,tag) values(?,?,?,?)";
 				PreparedStatement query = myConnection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS);
-				query.setInt(1, model_id);
-				query.setInt(2, state_id);
-				query.setInt(3,feature_id);
-				query.setString(4,tag);
-				query.executeUpdate();
-				ResultSet results = query.getGeneratedKeys();
-				
-				if(results.next())
-					ret = results.getInt(1);
+				for(String tag : tags)
+				{
+					query.setInt(1, model_id);
+					query.setInt(2, state_id);
+					query.setInt(3,feature_id);
+					query.setString(4,tag);
+					query.addBatch();
+				}
+				query.executeBatch();
+				//ResultSet results = query.getGeneratedKeys();
 			}
 		}
 		catch (Exception e) { e.printStackTrace(); }
@@ -376,20 +378,22 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 	{
 		System.err.println("inserting model to DB");
 		int model_id = insertModelRow(m.getName(),m.getAuthor(),m.getRevision(),m.getDescription(),m.getCategory());
-		for(String t1 : m.getTags())
-			insertTagRow(model_id,0,0,t1);
+		Boolean doInsertFeatureNames = true; //to save time by skipping inserting the names every iteration
+		HashMap<String,Integer> featureIDs = new HashMap<String,Integer>();
+		insertTagRow(model_id,0,0,m.getTags());
+		
 		for(State s : m.getStates())
 		{
 			int state_id = insertStateRow(model_id,s.getOrder(),s.getName(),s.getDescription(),s.getFormat());
-			for(String t2 : s.getTags())
-				insertTagRow(0,state_id,0,t2);
+			insertTagRow(0,state_id,0,s.getTags());
 			for(Feature f : s.getFeatures())
 			{
-				int feature_id = insertFeatureNameRow(f.getName(),"a feature desc");
-				int state_feature_id = insertStateFeatureScoreRow(state_id,feature_id,f.getOrder(),f.getScore());
-				for(String t3 : f.getTags())
-					insertTagRow(0,0,state_feature_id,t3);
+				if(doInsertFeatureNames)
+					featureIDs.put(f.getName(),insertFeatureNameRow(f.getName(),"a feature desc"));
+				int state_feature_id = insertStateFeatureScoreRow(state_id,featureIDs.get(f.getName()),f.getOrder(),f.getScore());
+				insertTagRow(0,0,state_feature_id,f.getTags());
 			}
+			doInsertFeatureNames = false;
 		}
 		return model_id;
 	}
