@@ -9,6 +9,7 @@ public class Model implements Serializable
 	private static final long serialVersionUID = 1L;
 	Integer id;
 	String name;
+	String category;
 	String author;
 	Timestamp revision;
 	String description;
@@ -48,7 +49,8 @@ public class Model implements Serializable
 	}
 	public Tags getTags()
 	{
-		return tags;
+		
+		return tags==null? new Tags() : tags;
 	}
 	public void setTags(Tags tags)
 	{
@@ -77,20 +79,28 @@ public class Model implements Serializable
 		String[] lines = s.split("[\r\n]+");
 		this.setName(lines[0]);
 		this.setAuthor(lines[1]);
-		this.setDescription(lines[2]);
+		this.setCategory(lines[2]);
+		this.setDescription(lines[3]);
 		this.setRevision(new Timestamp(new Date().getTime()));
-		String[] features = lines[4].trim().split("\\s+");
+		String[] features = lines[5].trim().split("\\s+");
 		
 		this.states = new ArrayList<State>();
-		for(int i=5;i<lines.length;i++)
+		for(int i=6;i<lines.length;i++)
 		{
 			String stateDescription = "";
 			Tags stateTags = new Tags();
+			String stateFormat = "";
+			if(lines[i].contains("{") && lines[i].contains("}"))
+			{
+				stateFormat = lines[i].substring(lines[i].lastIndexOf("{"),lines[i].lastIndexOf("}")+1);
+				lines[i] = lines[i].substring(0,lines[i].lastIndexOf("{"));
+			}
 			String[] stateTokens = lines[i].split("\\s");
 			
 			State myState = new State();
 			myState.setName(stateTokens[0]);
-			myState.setOrder(i-4);
+			myState.setOrder(i-5);
+			myState.setFormat(stateFormat);
 			ArrayList<Feature> stateFeatures = new ArrayList<Feature>();
 			
 			for (int j = 1;j<stateTokens.length;j++)				
@@ -121,6 +131,7 @@ public class Model implements Serializable
 	{
 		String ret = this.getName() + "\n";
 		ret += this.getRevision().toString() + "\n";
+		ret += this.getCategory() + "\n";
 		ret += this.getAuthor() + "\n";
 		ret += this.getDescription() + "\n";
 		String featureHeader = "";
@@ -133,9 +144,18 @@ public class Model implements Serializable
 			stateRow += s.getName() + "\t";
 			for (Feature f : s.getFeatures())
 				stateRow += f.getScore() + "\t";
-			ret += stateRow + s.getDescription() + "\n";
+			ret += stateRow + s.getDescription() + "\t" + s.getFormat() + "\n";
+			
 		}
 		
 		return ret;
+	}
+	public String getCategory()
+	{
+		return category;
+	}
+	public void setCategory(String category)
+	{
+		this.category = category;
 	}
 }

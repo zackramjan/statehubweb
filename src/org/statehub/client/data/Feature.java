@@ -27,7 +27,7 @@ public class Feature implements Serializable
 	}
 	public Tags getTags()
 	{
-		return tags;
+		return tags==null? new Tags() : tags;
 	}
 	public void setTags(Tags tags)
 	{
