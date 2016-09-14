@@ -11,6 +11,7 @@ public class State implements Serializable
 	String name;
 	String Description;
 	Tags tags;
+	String format;
 	ArrayList<Feature> features;
 	public Integer getId()
 	{
@@ -46,7 +47,7 @@ public class State implements Serializable
 	}
 	public Tags getTags()
 	{
-		return tags;
+		return tags==null? new Tags() : tags;
 	}
 	public void setTags(Tags tags)
 	{
@@ -59,5 +60,13 @@ public class State implements Serializable
 	public void setFeatures(ArrayList<Feature> features)
 	{
 		this.features = features;
+	}
+	public String getFormat()
+	{
+		return format;
+	}
+	public void setFormat(String format)
+	{
+		this.format = format;
 	}
 }

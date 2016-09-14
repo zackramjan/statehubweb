@@ -35,7 +35,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		{
 			if (myConnection != null)
 			{
-				String queryString = "select * from model";
+				String queryString = "select m.*,c.name from model m inner join model_cat c on m.model_cat_id = c.id ";
 				PreparedStatement query = myConnection.prepareStatement(queryString);
 				ResultSet results = query.executeQuery();
 				while(results.next())
@@ -48,6 +48,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 					m.setDescription(results.getString(5));
 					m.setStates(getStatesForModel(m.getId()));
 					m.setTags(getTagsforID(m.getId(),0,0));
+					m.setCategory(results.getString(7));
 					models.add(m);
 				}
 			}
@@ -68,7 +69,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		{
 			if (myConnection != null)
 			{
-				String queryString = "select * from state where model_id=?";
+				String queryString = "select * from state where model_id=? order by sort_order";
 				PreparedStatement query = myConnection.prepareStatement(queryString);
 				query.setInt(1, model_id);
 				
@@ -82,6 +83,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 					s.setDescription(results.getString(5));
 					s.setFeatures(getFeaturesForState(s.getId()));
 					s.setTags(getTagsforID(0,s.getId(),0));
+					s.setFormat(results.getString(6));
 					states.add(s);
 				}
 			}
@@ -102,7 +104,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		{
 			if (myConnection != null)
 			{
-				String queryString = "select f.name,s.score, s.id from state_features s inner join features f on s.feature_id = f.id where s.state_id=? order by s.order ASC";
+				String queryString = "select f.name,s.score, s.id from state_features s inner join features f on s.feature_id = f.id where s.state_id=? order by s.sort_order ASC";
 				PreparedStatement query = myConnection.prepareStatement(queryString);
 				query.setInt(1, state_id);
 				
@@ -154,7 +156,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		return tags;
 	}
 	
-	Integer insertModelRow(String name,String author,Timestamp revision,String description)
+	Integer insertModelRow(String name,String author,Timestamp revision,String description,String category)
 	{
 		java.sql.Connection myConnection = getConnection();
 		Integer ret = 0;
@@ -162,13 +164,16 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		{
 			if (myConnection != null)
 			{
-				String queryString = "insert into model (name,author,revision) values(?,?,?,?)";
+				System.err.println("inserting model: "  + name);
+				String queryString = "insert into model (name,author,revision,description,model_cat_id) values(?,?,?,?,?)";
 				PreparedStatement query = myConnection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS);
 				query.setString(1, name);
 				query.setString(2, author);
 				query.setTimestamp(3,revision);
 				query.setString(4, description);
-				ResultSet results = query.executeQuery();
+				query.setInt(5, insertCategoryNameRow(category));
+				query.executeUpdate();
+				ResultSet results = query.getGeneratedKeys();
 				
 				if(results.next())
 					ret = results.getInt(1);
@@ -182,21 +187,24 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		return ret;
 	}
 	
-	Integer insertStateRow(int model_id,int order,String name,String description)
+	Integer insertStateRow(int model_id,int order,String name,String description,String format)
 	{
+		System.err.println("inserting state: "  + name);
 		java.sql.Connection myConnection = getConnection();
 		Integer ret = 0;
 		try
 		{
 			if (myConnection != null)
 			{
-				String queryString = "insert into state (model_id,order,name,description) values(?,?,?,?)";
+				String queryString = "insert into state  (model_id,sort_order,name,description,format) values(?,?,?,?,?)";
 				PreparedStatement query = myConnection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS);
 				query.setInt(1, model_id);
 				query.setInt(2, order);
 				query.setString(3,name);
 				query.setString(4,description);
-				ResultSet results = query.executeQuery();
+				query.setString(5, format);
+				query.executeUpdate();
+				ResultSet results = query.getGeneratedKeys();
 				
 				if(results.next())
 					ret = results.getInt(1);
@@ -212,6 +220,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 	
 	Integer insertFeatureNameRow(String name,String description)
 	{
+		System.err.println("inserting Feature name: "  + name);
 		java.sql.Connection myConnection = getConnection();
 		Integer ret = 0;
 		try
@@ -222,12 +231,12 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 				PreparedStatement query = myConnection.prepareStatement(queryString);
 				query.setString(1,name);
 				query.setString(2,description);
-				query.executeQuery();
+				query.executeUpdate();
 				
 				String queryString2 = "select id from features where name=?";
 				PreparedStatement query2 = myConnection.prepareStatement(queryString2);
 				query2.setString(1,name);
-				ResultSet results2 = query.executeQuery();
+				ResultSet results2 = query2.executeQuery();
 				
 				while(results2.next())
 					ret = results2.getInt(1);
@@ -241,22 +250,57 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		return ret;
 	}
 	
-	Integer insertStateFeatureScoreRow(int state_id,int feature_id,int order,float score)
+	
+	Integer insertCategoryNameRow(String name)
 	{
+		System.err.println("inserting cat name: "  + name);
 		java.sql.Connection myConnection = getConnection();
 		Integer ret = 0;
 		try
 		{
 			if (myConnection != null)
 			{
-				String queryString = "insert into state_features (state_id,state_feature_id,order,score) values(?,?,?,?)";
+				String queryString = "insert ignore into model_cat (name) values(?)";
+				PreparedStatement query = myConnection.prepareStatement(queryString);
+				query.setString(1,name);
+				query.executeUpdate();
+				
+				String queryString2 = "select id from model_cat where name=?";
+				PreparedStatement query2 = myConnection.prepareStatement(queryString2);
+				query2.setString(1,name);
+				ResultSet results2 = query2.executeQuery();
+				
+				while(results2.next())
+					ret = results2.getInt(1);
+			}
+		}
+		catch (Exception e) { e.printStackTrace(); }
+		finally 	{
+			if(myConnection != null)
+				try{myConnection.close();}catch(Exception f){f.printStackTrace();}
+		}
+		return ret;
+	}
+	
+	
+	
+	Integer insertStateFeatureScoreRow(int state_id,int feature_id,int order,float score)
+	{
+		System.err.println("inserting Feature: "  + score);
+		java.sql.Connection myConnection = getConnection();
+		Integer ret = 0;
+		try
+		{
+			if (myConnection != null)
+			{
+				String queryString = "insert into state_features (state_id,feature_id,sort_order,score) values(?,?,?,?)";
 				PreparedStatement query = myConnection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS);
 				query.setInt(1, state_id);
 				query.setInt(2, feature_id);
 				query.setInt(3, order);
 				query.setFloat(4,score);
-
-				ResultSet results = query.executeQuery();
+				query.executeUpdate();
+				ResultSet results = query.getGeneratedKeys();
 				
 				if(results.next())
 					ret = results.getInt(1);
@@ -272,6 +316,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 	
 	Integer insertTagRow(Integer model_id,Integer state_id,Integer feature_id, String tag)
 	{
+		System.err.println("inserting tag: " + tag);
 		java.sql.Connection myConnection = getConnection();
 		Integer ret = 0;
 		try
@@ -284,8 +329,8 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 				query.setInt(2, state_id);
 				query.setInt(3,feature_id);
 				query.setString(4,tag);
-
-				ResultSet results = query.executeQuery();
+				query.executeUpdate();
+				ResultSet results = query.getGeneratedKeys();
 				
 				if(results.next())
 					ret = results.getInt(1);
@@ -329,12 +374,13 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 	@Override
 	public Integer storeModel(Model m)
 	{
-		int model_id = insertModelRow(m.getName(),m.getAuthor(),m.getRevision(),m.getDescription());
+		System.err.println("inserting model to DB");
+		int model_id = insertModelRow(m.getName(),m.getAuthor(),m.getRevision(),m.getDescription(),m.getCategory());
 		for(String t1 : m.getTags())
 			insertTagRow(model_id,0,0,t1);
 		for(State s : m.getStates())
 		{
-			int state_id = insertStateRow(model_id,s.getOrder(),s.getName(),s.getDescription());
+			int state_id = insertStateRow(model_id,s.getOrder(),s.getName(),s.getDescription(),s.getFormat());
 			for(String t2 : s.getTags())
 				insertTagRow(0,state_id,0,t2);
 			for(Feature f : s.getFeatures())
