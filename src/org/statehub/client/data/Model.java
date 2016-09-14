@@ -78,9 +78,9 @@ public class Model implements Serializable
 		
 		String[] lines = s.split("[\r\n]+");
 		this.setName(lines[0]);
-		this.setAuthor(lines[1]);
 		this.setCategory(lines[2]);
-		this.setDescription(lines[3]);
+		this.setAuthor(lines[3]);
+		this.setDescription(lines[4]);
 		this.setRevision(new Timestamp(new Date().getTime()));
 		String[] features = lines[5].trim().split("\\s+");
 		
