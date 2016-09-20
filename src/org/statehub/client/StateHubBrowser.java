@@ -19,6 +19,7 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.TextArea;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.info.Info;
 
 public class StateHubBrowser extends Composite
@@ -31,6 +32,7 @@ public class StateHubBrowser extends Composite
 	@UiField FramedPanel panel;
     @UiField VerticalLayoutContainer vlc;
 	@UiField TextButton searchButton;
+	@UiField TextField searchText;
 	
 	public StateHubBrowser()
 	{
@@ -50,7 +52,7 @@ public class StateHubBrowser extends Composite
 	@UiHandler("searchButton")
 	public void find(SelectEvent event)
 	{
-		statehubsvc.getModel("", new AsyncCallback<ArrayList<Model>>(){
+		statehubsvc.getModel(searchText.getText(), new AsyncCallback<ArrayList<Model>>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
