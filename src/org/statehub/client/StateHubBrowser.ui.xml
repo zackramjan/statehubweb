@@ -32,7 +32,7 @@
       <c:FramedPanel heading="StateHub - ALPHA" ui:field="panel">
         <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="vlc">
 			<g:HorizontalPanel>
-				 <form:TextField ui:field="firstName" allowBlank="false" emptyText="Enter Search Text..." />
+				 <form:TextField ui:field="searchText" allowBlank="false" emptyText="Enter Search Text..." />
 				 <button:TextButton text="Search" ui:field="searchButton"/><button:TextButton text="import" ui:field="importButton"/>
 			</g:HorizontalPanel>
        </container:VerticalLayoutContainer>
