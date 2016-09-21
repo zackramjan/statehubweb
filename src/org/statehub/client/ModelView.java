@@ -11,19 +11,28 @@ import org.statehub.client.data.StateModelFactory;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 public class ModelView extends Composite 
 {
@@ -33,14 +42,78 @@ public class ModelView extends Composite
 	interface ModelViewUiBinder extends UiBinder<Widget, ModelView>	{}
 	@UiField FramedPanel panel;
     @UiField VerticalLayoutContainer vlc;
+    @UiField FieldLabel nameLabel;
+    @UiField FieldLabel descLabel;
 	private static final StateModel properties = GWT.create(StateModel.class);
+	private final StateHubServiceAsync statehubsvc = GWT.create(StateHubService.class);
 	ListStore<State> store=new ListStore<State>(properties.key());
-	public ModelView(Model model)
+	public ModelView(final Model model)
 	
 	{
-		
 		initWidget(uiBinder.createAndBindUi(this));
-		panel.setWidth(500);
+		panel.setHeading(model.getName() + "  (" + model.getCategory() + ") - revision: " + model.getRevision());
+		nameLabel.setText("creator: " + model.getAuthor());
+		descLabel.setText("description: " + model.getDescription());
+		Image txtIcon = new Image("txt-icon.png");
+		txtIcon.setPixelSize(30, 30);
+		panel.getHeader().addTool(txtIcon);
+		Image jsonIcon = new Image("json-icon.png");
+		jsonIcon.setPixelSize(30, 30);
+		panel.getHeader().addTool(jsonIcon);
+		
+		txtIcon.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				   final Dialog simple = new Dialog();
+				   simple.setHeading(model.getName() + " — TXT");
+				      simple.setWidth(700);
+				      simple.setHeight(700);
+				      simple.setResizable(true);
+				      simple.setHideOnButtonClick(true);
+				      simple.setPredefinedButtons(PredefinedButton.OK);
+				      simple.setBodyStyleName("pad-text");
+				      simple.getBody().addClassName("pad-text");
+				      TextArea t = new TextArea();
+				      t.setText(model.toString());
+				      simple.add(t);
+				      simple.show();
+				
+			}});
+		
+		jsonIcon.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				   final Dialog simple = new Dialog();
+				      simple.setHeading(model.getName() + " — JSON");
+				      simple.setWidth(700);
+				      simple.setHeight(700);
+				      simple.setResizable(true);
+				      simple.setHideOnButtonClick(true);
+				      simple.setPredefinedButtons(PredefinedButton.OK);
+				      simple.setBodyStyleName("pad-text");
+				      simple.getBody().addClassName("pad-text");
+				      final TextArea t = new TextArea();
+				      statehubsvc.toJson(model, new AsyncCallback<String>(){
+
+						@Override
+						public void onFailure(Throwable caught) {
+							Info.display("Error",caught.getMessage());
+							
+						}
+
+						@Override
+						public void onSuccess(String result) {
+							t.setText(result);
+							
+						}});
+				      simple.add(t);
+				      simple.show();
+				
+			}});
+		
+		
 		
 		List<ColumnConfig<State, ?>> columnDefs = new ArrayList<ColumnConfig<State, ?>>();
 		ColumnConfig<State, String> cc1 = new ColumnConfig<State, String>(properties.name(), 100, "Name");
@@ -81,10 +154,7 @@ public class ModelView extends Composite
 		
 		store.addAll(model.getStates());
 		final Grid<State> stateGrid = new Grid<State>(store,colModel);
-		
 		vlc.add(stateGrid);
-		
-		
 		
 	}
 

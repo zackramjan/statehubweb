@@ -20,16 +20,15 @@
   </ui:with>
 
   <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
-    <ui:attributes width="1" height="1"  margins="{topFormMargins}" />
+    <ui:attributes width="-1" height="1"  margins="{topFormMargins}" />
   </ui:with>
 
   <container:VerticalLayoutContainer>
     <container:child>
-      <c:FramedPanel heading="modelName" ui:field="panel">
-        <container:VerticalLayoutContainer ui:field="vlc">
-			<g:HorizontalPanel>
-				 <button:TextButton text="Search" ui:field="searchButton"/><button:TextButton text="import" ui:field="importButton"/>
-			</g:HorizontalPanel>
+      <c:FramedPanel heading="modelName" ui:field="panel" layoutData="{verticalLayoutData}">
+        <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="vlc" >
+			<form:FieldLabel labelWidth="400" text="hello" ui:field="nameLabel"/>	
+			<form:FieldLabel labelWidth="400" text="hello" ui:field="descLabel"/>			
        </container:VerticalLayoutContainer>
       </c:FramedPanel>
     </container:child>

@@ -32,3 +32,10 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+.css-vertical-text {
+    filter         : progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    -webkit-transform  : rotate(90deg);
+    -moz-transform     : rotate(90deg);
+    -o-transform       : rotate(90deg);
+}
