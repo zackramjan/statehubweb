@@ -19,26 +19,20 @@
     <ui:attributes top="15" right="15" bottom="15" left="15" />
   </ui:with>
 
-<!--   <ui:with type="com.sencha.gxt.widget.core.client.container.MarginData" field="topFormMarginData"> -->
-<!--     <ui:attributes margins="{topFormMargins}" /> -->
-<!--   </ui:with> -->
-
   <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
     <ui:attributes width="1" height="1"  margins="{topFormMargins}" />
   </ui:with>
 
   <container:VerticalLayoutContainer>
-    <container:child layoutData="{topLayout}">
-      <c:FramedPanel heading="StateHub - ALPHA" ui:field="panel">
-        <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="vlc">
+    <container:child>
+      <c:FramedPanel heading="modelName" ui:field="panel">
+        <container:VerticalLayoutContainer ui:field="vlc">
 			<g:HorizontalPanel>
-				 <form:TextField ui:field="searchText" allowBlank="false" emptyText="Enter Search Text..." />
 				 <button:TextButton text="Search" ui:field="searchButton"/><button:TextButton text="import" ui:field="importButton"/>
 			</g:HorizontalPanel>
-			 <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="resultsVlc"/>
        </container:VerticalLayoutContainer>
       </c:FramedPanel>
     </container:child>
   </container:VerticalLayoutContainer>
-
-</ui:UiBinder>
+		
+</ui:UiBinder> 
