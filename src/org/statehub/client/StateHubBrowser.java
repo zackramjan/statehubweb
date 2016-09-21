@@ -31,6 +31,7 @@ public class StateHubBrowser extends Composite
 
 	@UiField FramedPanel panel;
     @UiField VerticalLayoutContainer vlc;
+    @UiField VerticalLayoutContainer resultsVlc;
 	@UiField TextButton searchButton;
 	@UiField TextField searchText;
 	
@@ -40,6 +41,7 @@ public class StateHubBrowser extends Composite
 		panel.setWidth(com.google.gwt.user.client.Window.getClientWidth()-100);
 		panel.setHeight(com.google.gwt.user.client.Window.getClientHeight()-80);
 		vlc.setScrollMode(ScrollMode.AUTO);
+		resultsVlc.setScrollMode(ScrollMode.AUTO);
 		com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler(){
 
 			@Override
@@ -61,6 +63,7 @@ public class StateHubBrowser extends Composite
 
 			@Override
 			public void onSuccess(ArrayList<Model> result) {
+				resultsVlc.clear();
 				for(final Model m : result)
 					showModel(m);
 			}});
@@ -81,7 +84,7 @@ public class StateHubBrowser extends Composite
 		importVLC.add(t);
 		TextButton doImportButton = new TextButton("import");
 		importVLC.add(doImportButton);
-		vlc.add(f);
+		resultsVlc.add(f);
 		f.add(importVLC);
 		doImportButton.addSelectHandler(new SelectHandler(){
 
@@ -90,7 +93,7 @@ public class StateHubBrowser extends Composite
 				Model m = new Model();
 				m.parseFromString(t.getText());
 				showModel(m);
-				vlc.remove(f);
+				resultsVlc.remove(f);
 				statehubsvc.storeModel(m, new AsyncCallback<Integer>(){
 
 					@Override
@@ -126,16 +129,17 @@ public class StateHubBrowser extends Composite
 				 TextArea j = new TextArea();
 				 TextArea t = new TextArea();
 				 j.setText(result);
-				 j.setWidth(500);
+				 j.setWidth(300);
 				 j.setHeight(500);
 				 t.setText(m.toString());
-				 t.setWidth(500);
+				 t.setWidth(300);
 				 t.setHeight(500);
 				
 				 h.add(j);
 				 h.add(t);
+				 h.add(new ModelView(m));
 				 f.add(h);
-				 vlc.add(f);
+				 resultsVlc.add(f);
 			}});
 	}
 }

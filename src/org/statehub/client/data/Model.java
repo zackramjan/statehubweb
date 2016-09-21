@@ -7,7 +7,7 @@ import java.util.Date;
 public class Model implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	Integer id;
+	String id;
 	String name;
 	String category;
 	String author;
@@ -15,13 +15,13 @@ public class Model implements Serializable
 	String description;
 	ArrayList<State> states;
 	Tags tags;
-	public Integer getId()
+	public String getId()
 	{
 		return id;
 	}
-	public void setId(Integer id)
+	public void setId(String _id)
 	{
-		this.id = id;
+		this.id = _id;
 	}
 	public String getName()
 	{

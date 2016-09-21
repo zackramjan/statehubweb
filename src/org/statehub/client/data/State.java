@@ -9,10 +9,18 @@ public class State implements Serializable
 	Integer id;
 	Integer order;
 	String name;
-	String Description;
+	String description;
 	Tags tags;
 	String format;
 	ArrayList<Feature> features;
+	public String getKey()
+	{
+		return name+order;
+	}
+	public void setKey(Integer id)
+	{
+		this.id = id;
+	}
 	public Integer getId()
 	{
 		return id;
@@ -39,11 +47,11 @@ public class State implements Serializable
 	}
 	public String getDescription()
 	{
-		return Description;
+		return description;
 	}
 	public void setDescription(String description)
 	{
-		Description = description;
+		this.description = description;
 	}
 	public Tags getTags()
 	{
