@@ -112,34 +112,7 @@ public class StateHubBrowser extends Composite
 	
 	private void showModel(final Model m)
 	{
-		statehubsvc.toJson(m, new AsyncCallback<String>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				 Info.display("Error",caught.getMessage());
-				
-			}
-
-			@Override
-			public void onSuccess(String result) {
-				final FramedPanel f = new FramedPanel();
-				f.setWidth(1000);
-				f.setHeading(m.getName());
-				HorizontalPanel h = new HorizontalPanel();
-				 TextArea j = new TextArea();
-				 TextArea t = new TextArea();
-				 j.setText(result);
-				 j.setWidth(300);
-				 j.setHeight(500);
-				 t.setText(m.toString());
-				 t.setWidth(300);
-				 t.setHeight(500);
-				
-				 h.add(j);
-				 h.add(t);
-				 h.add(new ModelView(m));
-				 f.add(h);
-				 resultsVlc.add(f);
-			}});
+		resultsVlc.add(new ModelView(m));
+		
 	}
 }
