@@ -192,6 +192,10 @@ public class ModelView extends Composite
 			public void onClick(ClickEvent event) {
 				store.setEnableFilters(!store.isEnableFilters());
 				if(isExpanded=false);
+				if(!store.isEnableFilters())
+					panel.expand();
+				else
+					panel.collapse();
 				
 			}});
 		
