@@ -77,4 +77,11 @@ public class State implements Serializable
 	{
 		this.format = format;
 	}
+	public String getFeaturesReadable()
+	{
+		String ret = "";
+		for (Feature f : this.getFeatures())
+			ret += f.toReadable() + " ";
+		return ret;
+	}
 }

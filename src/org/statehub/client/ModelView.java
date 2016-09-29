@@ -171,9 +171,10 @@ public class ModelView extends Composite
 			String searchLower = search.toLowerCase();
 			Boolean found = 
 			item.getDescription().toLowerCase().contains(searchLower) ||
-			item.getName().toLowerCase().contains(searchLower);
-			//item.getTags() != null? item.getTags().toString().toLowerCase().contains(searchLower) : false ||
-			//item.getFeatures() != null ? item.getFeatures().toString().toLowerCase().contains(searchLower) : false;
+			item.getName().toLowerCase().contains(searchLower) ||
+			item.getTags().toReadable().toLowerCase().contains(searchLower) ||
+			item.getFeaturesReadable().toLowerCase().contains(searchLower);
+			
 			//found = item.getName().toLowerCase().contains(searchLower);
 			return found;
 		}};
