@@ -29,6 +29,8 @@ import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.ViewReadyEvent;
+import com.sencha.gxt.widget.core.client.event.ViewReadyEvent.ViewReadyHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
@@ -45,12 +47,15 @@ public class ModelView extends Composite
 	interface ModelViewUiBinder extends UiBinder<Widget, ModelView>	{}
 	@UiField FramedPanel panel;
     @UiField VerticalLayoutContainer vlc;
+    @UiField VerticalLayoutContainer modelDetailsPanel;
     @UiField FieldLabel nameLabel;
     @UiField FieldLabel descLabel;
 	private static final StateModel properties = GWT.create(StateModel.class);
 	private final StateHubServiceAsync statehubsvc = GWT.create(StateHubService.class);
 	ListStore<State> store=new ListStore<State>(properties.key());
 	StoreFilter<State> filter;
+	Grid<State> stateGrid; 
+	Boolean isExpanded = false;
 	  RowExpander<State> rowExpander = new RowExpander<State>(new AbstractCell<State>() {
 	        @Override
 	        public void render(Context context, State value, SafeHtmlBuilder sb) {
@@ -65,15 +70,32 @@ public class ModelView extends Composite
 	
 	{
 		initWidget(uiBinder.createAndBindUi(this));
+		panel.setCollapsible(true);
+		panel.setBorders(false);
 		panel.setHeading(model.getName() + "  (" + model.getCategory() + ") - revision: " + model.getRevision());
 		nameLabel.setText("creator: " + model.getAuthor());
 		descLabel.setText("description: " + model.getDescription());
+		
+		Image filterIcon = new Image("filter.png");
+		filterIcon.setPixelSize(30, 30);
+		panel.getHeader().addTool(filterIcon);
+		filterIcon.setTitle("Show all states in this model");
+		
+		Image expandIcon = new Image("expand.png");
+		expandIcon.setPixelSize(30, 30);
+		panel.getHeader().addTool(expandIcon);
+		expandIcon.setTitle("Show/Hide State details");
+		
 		Image txtIcon = new Image("txt-icon.png");
 		txtIcon.setPixelSize(30, 30);
 		panel.getHeader().addTool(txtIcon);
+		txtIcon.setTitle("Export Model to TXT (JSON is preffered)");
+		
 		Image jsonIcon = new Image("json-icon.png");
 		jsonIcon.setPixelSize(30, 30);
 		panel.getHeader().addTool(jsonIcon);
+		jsonIcon.setTitle("Export Model to JSON");
+		
 		
 		txtIcon.addClickHandler(new ClickHandler(){
 
@@ -127,6 +149,51 @@ public class ModelView extends Composite
 				
 			}});
 		
+		expandIcon.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if(isExpanded == false)
+				{
+				stateGrid.addViewReadyHandler(new ViewReadyHandler(){
+
+					@Override
+					public void onViewReady(ViewReadyEvent event) {
+						for(int i =0; i<store.size();i++)
+							rowExpander.expandRow(i);
+						isExpanded = true;
+					}});
+					for(int i =0; i<store.size();i++)
+						rowExpander.expandRow(i);
+					isExpanded = true;
+
+				}
+				else
+				{
+					stateGrid.addViewReadyHandler(new ViewReadyHandler(){
+
+						@Override
+						public void onViewReady(ViewReadyEvent event) {
+							for(int i =0; i<store.size();i++)
+								rowExpander.collapseRow(i);
+							isExpanded = false;
+						}});
+					for(int i =0; i<store.size();i++)
+						rowExpander.collapseRow(i);
+					isExpanded = false;
+				}  
+				
+			}});
+		
+		
+		filterIcon.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				store.setEnableFilters(!store.isEnableFilters());
+				if(isExpanded=false);
+				
+			}});
 		
 		
 		List<ColumnConfig<State, ?>> columnDefs = new ArrayList<ColumnConfig<State, ?>>();
@@ -168,7 +235,7 @@ public class ModelView extends Composite
 		
 		
 		store.addAll(model.getStates());
-		final Grid<State> stateGrid = new Grid<State>(store,colModel);
+		stateGrid = new Grid<State>(store,colModel);
 		rowExpander.initPlugin(stateGrid);
 		vlc.add(stateGrid);
 		
@@ -193,6 +260,16 @@ public class ModelView extends Composite
 		}};
 		store.setEnableFilters(true);
 		store.addFilter(filter);
+		panel.collapse();
+		stateGrid.addViewReadyHandler(new ViewReadyHandler(){
+
+			@Override
+			public void onViewReady(ViewReadyEvent event) {
+				for(int i =0; i<store.size();i++)
+					rowExpander.expandRow(i);
+				isExpanded = true;
+			}});
+		
 		
 		
 	}
