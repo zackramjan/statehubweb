@@ -23,6 +23,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.data.shared.Store;
+import com.sencha.gxt.data.shared.Store.StoreFilter;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
@@ -47,6 +49,7 @@ public class ModelView extends Composite
 	private static final StateModel properties = GWT.create(StateModel.class);
 	private final StateHubServiceAsync statehubsvc = GWT.create(StateHubService.class);
 	ListStore<State> store=new ListStore<State>(properties.key());
+	StoreFilter<State> filter;
 	public ModelView(final Model model)
 	
 	{
@@ -155,6 +158,28 @@ public class ModelView extends Composite
 		store.addAll(model.getStates());
 		final Grid<State> stateGrid = new Grid<State>(store,colModel);
 		vlc.add(stateGrid);
+		
+	}
+	public ModelView(Model model, final String search)
+	{
+		this(model);
+		filter = new StoreFilter<State>(){
+
+		@Override
+		public boolean select(Store<State> store, State parent, State item)
+		{
+			String searchLower = search.toLowerCase();
+			Boolean found = 
+			item.getDescription().toLowerCase().contains(searchLower) ||
+			item.getName().toLowerCase().contains(searchLower);
+			//item.getTags() != null? item.getTags().toString().toLowerCase().contains(searchLower) : false ||
+			//item.getFeatures() != null ? item.getFeatures().toString().toLowerCase().contains(searchLower) : false;
+			//found = item.getName().toLowerCase().contains(searchLower);
+			return found;
+		}};
+		store.setEnableFilters(true);
+		store.addFilter(filter);
+		
 		
 	}
 
