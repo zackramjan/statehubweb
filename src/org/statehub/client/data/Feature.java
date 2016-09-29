@@ -43,7 +43,10 @@ public class Feature implements Serializable
 	}
 	public String toReadable()
 	{
-		return name + "=" + score + " " + tags.toString();
+		if(tags!=null)
+			return name + "=" + score + " " + tags.toReadable();
+		else
+			return name + "=" + score;
 	}
 
 }

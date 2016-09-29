@@ -115,8 +115,8 @@ public class Model implements Serializable
 				}
 				else
 				{
-					stateTags.add(stateTokens[j]);
-					stateDescription += " " +  stateTokens[j];
+					stateTags.add(stateTokens[j].replace("tag:", ""));
+					stateDescription += " " +  stateTokens[j].replace("tag:", "");
 				}
 			}
 			
