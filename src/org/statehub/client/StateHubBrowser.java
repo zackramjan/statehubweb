@@ -65,7 +65,10 @@ public class StateHubBrowser extends Composite
 			public void onSuccess(ArrayList<Model> result) {
 				resultsVlc.clear();
 				for(final Model m : result)
-					resultsVlc.add(new ModelView(m,searchText.getText()));
+					if(searchText.getText().length()>0)
+						resultsVlc.add(new ModelView(m,searchText.getText()));
+					else
+						resultsVlc.add(new ModelView(m));
 					//showModel(m);
 			}});
 

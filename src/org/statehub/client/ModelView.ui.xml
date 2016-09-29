@@ -26,12 +26,18 @@
   <container:VerticalLayoutContainer>
     <container:child>
       <c:FramedPanel heading="modelName" ui:field="panel" layoutData="{verticalLayoutData}">
-        <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="vlc" >
+      	 <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="modelDetailsPanel" >
+			<form:FieldLabel labelWidth="400" text="Model Details"/>
 			<form:FieldLabel labelWidth="400" text="hello" ui:field="nameLabel"/>	
 			<form:FieldLabel labelWidth="400" text="hello" ui:field="descLabel"/>			
        </container:VerticalLayoutContainer>
+       
       </c:FramedPanel>
     </container:child>
+    <container:child>
+     <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="vlc" >
+       </container:VerticalLayoutContainer>
+      </container:child>
   </container:VerticalLayoutContainer>
 		
 </ui:UiBinder> 
