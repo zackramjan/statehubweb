@@ -3,6 +3,11 @@ package org.statehub.client;
 import java.util.ArrayList;
 import org.statehub.client.data.Model;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -50,6 +55,20 @@ public class StateHubBrowser extends Composite
 				panel.setWidth(event.getWidth()-100);
 				panel.setHeight(event.getHeight()-200);
 			}});
+		
+		searchText.addKeyDownHandler(new KeyDownHandler(){
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+					find(null);
+			}
+
+			
+				
+			});
+		
+		
 	}
 	@UiHandler("searchButton")
 	public void find(SelectEvent event)
