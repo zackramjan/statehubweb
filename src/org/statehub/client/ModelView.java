@@ -34,6 +34,7 @@ import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.RowExpander;
 import com.sencha.gxt.widget.core.client.info.Info;
 
 public class ModelView extends Composite 
@@ -50,6 +51,16 @@ public class ModelView extends Composite
 	private final StateHubServiceAsync statehubsvc = GWT.create(StateHubService.class);
 	ListStore<State> store=new ListStore<State>(properties.key());
 	StoreFilter<State> filter;
+	  RowExpander<State> rowExpander = new RowExpander<State>(new AbstractCell<State>() {
+	        @Override
+	        public void render(Context context, State value, SafeHtmlBuilder sb) {
+	          sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Name:</b> " + value.getName() + "</p>");
+	          sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Description:</b> " + value.getDescription());
+	          sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>TAGS:</b> " + value.getTags().toReadable());
+	        }
+	      });
+	
+	
 	public ModelView(final Model model)
 	
 	{
@@ -119,6 +130,7 @@ public class ModelView extends Composite
 		
 		
 		List<ColumnConfig<State, ?>> columnDefs = new ArrayList<ColumnConfig<State, ?>>();
+		columnDefs.add(rowExpander);
 		ColumnConfig<State, String> cc1 = new ColumnConfig<State, String>(properties.name(), 100, "Name");
 		cc1.setCellPadding(false);
 		cc1.setCell(new AbstractCell<String>() {
@@ -157,6 +169,7 @@ public class ModelView extends Composite
 		
 		store.addAll(model.getStates());
 		final Grid<State> stateGrid = new Grid<State>(store,colModel);
+		rowExpander.initPlugin(stateGrid);
 		vlc.add(stateGrid);
 		
 	}
