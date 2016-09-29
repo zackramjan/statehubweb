@@ -41,5 +41,9 @@ public class Feature implements Serializable
 	{
 		this.order = order;
 	}
+	public String toReadable()
+	{
+		return name + "=" + score + " " + tags.toString();
+	}
 
 }
