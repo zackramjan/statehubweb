@@ -41,14 +41,23 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			if(search != null && search.length() > 1)
 			{
 				System.err.println("doing fulltext for "+ search);
-				for (Document cur : collection.find(Filters.text(search))) 
-					models.add(fromJson(cur.toJson()));
+				for (Document cur : collection.find(Filters.text(search)))
+				{
+					Model m = fromJson(cur.toJson());
+					m.setId(cur.getObjectId("_id").toString());
+					models.add(m);					
+				}
+					
 			}
 			else
 			{
 				System.err.println("getting all models");
 				for (Document cur : collection.find()) 
-					models.add(fromJson(cur.toJson()));
+				{
+					Model m = fromJson(cur.toJson());
+					m.setId(cur.getObjectId("_id").toString());
+					models.add(m);					
+				}
 			}
 				
 			mongoClient.close();
