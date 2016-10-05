@@ -50,18 +50,20 @@ public class ModelView extends Composite
     @UiField VerticalLayoutContainer modelDetailsPanel;
     @UiField FieldLabel nameLabel;
     @UiField FieldLabel descLabel;
+    @UiField FieldLabel idLabel;
 	private static final StateModel properties = GWT.create(StateModel.class);
 	private final StateHubServiceAsync statehubsvc = GWT.create(StateHubService.class);
 	ListStore<State> store=new ListStore<State>(properties.key());
 	StoreFilter<State> filter;
 	Grid<State> stateGrid; 
+	Model model;
 	Boolean isExpanded = false;
 	  RowExpander<State> rowExpander = new RowExpander<State>(new AbstractCell<State>() {
 	        @Override
 	        public void render(Context context, State value, SafeHtmlBuilder sb) {
 	          sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Name:</b> " + value.getName() + "</p>");
 	          sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Description:</b> " + value.getDescription());
-	          sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>TAGS:</b> " + value.getTags().toReadable());
+	          sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>TAGS:</b> " + value.getTags().toReadable().replaceAll("img src=\"", "img src=\"images/"+model.getId()+"-"));
 	        }
 	      });
 	
@@ -70,11 +72,13 @@ public class ModelView extends Composite
 	
 	{
 		initWidget(uiBinder.createAndBindUi(this));
+		this.model = model;
 		panel.setCollapsible(true);
 		panel.setBorders(false);
 		panel.setHeading(model.getName() + "  (" + model.getCategory() + ") - revision: " + model.getRevision());
 		nameLabel.setText("creator: " + model.getAuthor());
 		descLabel.setText("description: " + model.getDescription());
+		idLabel.setText("Unique ID: "  + model.getId());
 		
 		Image filterIcon = new Image("filter.png");
 		filterIcon.setPixelSize(30, 30);
