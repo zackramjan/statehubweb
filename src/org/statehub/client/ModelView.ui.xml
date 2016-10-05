@@ -29,7 +29,8 @@
       	 <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="modelDetailsPanel" >
 			<form:FieldLabel labelWidth="400" text="Model Details"/>
 			<form:FieldLabel labelWidth="400" text="hello" ui:field="nameLabel"/>	
-			<form:FieldLabel labelWidth="400" text="hello" ui:field="descLabel"/>			
+			<form:FieldLabel labelWidth="400" text="hello" ui:field="descLabel"/>
+			<form:FieldLabel labelWidth="400" text="hello" ui:field="idLabel"/>			
        </container:VerticalLayoutContainer>
        
       </c:FramedPanel>
