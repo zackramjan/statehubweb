@@ -230,7 +230,7 @@ public class ModelView extends Composite
 					public void render(Context context,String value, SafeHtmlBuilder sb) 
 					{
 						int r = 40 * (Integer.parseInt(value) + 2);
-						int g = 40 * (Integer.parseInt(value) + 3);
+						int g = 20 * (Integer.parseInt(value) + 3);
 						int b = 80 * (Integer.parseInt(value) + 4);
 						String color = "rgb(" + r + "," + g + "," + b + ")";
 						sb.appendHtmlConstant("<span style=\"overflow:auto;height:100%;width:100px;display:block;background-color:" + color + "\" title=\"score is "+  value + "\">" + value + "</span>");
