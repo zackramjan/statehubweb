@@ -39,3 +39,40 @@ h1 {
     -moz-transform     : rotate(90deg);
     -o-transform       : rotate(90deg);
 }
+
+.stateTable0 {
+	background-color:gray;
+	overflow:auto;
+	height:100%;
+	width:100px;
+	display:block;
+}
+
+.stateTable1 {
+	background-color:rosybrown;
+	overflow:auto;
+	height:100%;
+	width:100px;
+	display:block;
+}
+.stateTable2 {
+	background-color:pink;
+	overflow:auto;
+	height:100%;
+	width:100px;
+	display:block;
+}
+.stateTable3 {
+	background-color:red;
+	overflow:auto;
+	height:100%;
+	width:100px;
+	display:block;
+}
+.stateTable4 {
+	background-color:green;
+	overflow:auto;
+	height:100%;
+	width:100px;
+	display:block;
+}
