@@ -6,11 +6,20 @@ try
 {
 	StateHubServiceImpl backend = new StateHubServiceImpl();
 	String search = request.getParameter("search");
-	 
-	   
-	 
-	   
-	   out.println("search: " + search);
+	String id = request.getParameter("id");
+	ArrayList<Model> full = backend.getModel(search);
+	ArrayList<Model> filtered = new ArrayList<Model>();
+	if(id != null && id.length() > 10)
+	{
+	 	for(Model m : full)
+	 		if(m.getId().contains(id))
+	 			filtered.add(m);
+	}
+	else
+		filtered = full;
+	 backend.getModel(search);
+	 Gson gson = new Gson();
+     out.print( gson.toJson(filtered));
 }
 catch(Exception e)
 {
