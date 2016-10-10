@@ -15,6 +15,16 @@ public class Model implements Serializable
 	String description;
 	ArrayList<State> states;
 	Tags tags;
+	
+	public String getKey()
+	{
+		return id;
+	}
+	public void setKey(String _id)
+	{
+		this.id = _id;
+	}
+	
 	public String getId()
 	{
 		return id;
@@ -39,6 +49,11 @@ public class Model implements Serializable
 	{
 		this.revision = revision;
 	}
+	public String getRevisionTxt()
+	{
+		return revision.toString();
+	}
+	
 	public ArrayList<State> getStates()
 	{
 		return states;
