@@ -28,6 +28,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.data.shared.ListStore;
@@ -153,6 +154,7 @@ public class StateHubBrowser extends Composite
 				store.clear();
 				store.addAll(result);
 				resultsVlc.clear();
+				resultsVlc.add(new Label(result.size() + " models matched"));
 				for(final Model m : result)
 					if(searchText.getText().length()>0)
 						resultsVlc.add(new ModelView(m,searchText.getText()));
