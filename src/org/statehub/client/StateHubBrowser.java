@@ -140,8 +140,6 @@ public class StateHubBrowser extends Composite
 		ColumnConfig<Model, String> cc3 = new ColumnConfig<Model, String>(properties.description(), 400, "Description");
 		ColumnConfig<Model, String> cc4 = new ColumnConfig<Model, String>(properties.id(), 100, "Unique id");
 		ColumnConfig<Model, String> cc5 = new ColumnConfig<Model, String>(properties.revisionTxt(), 200, "revision");
-		ImageCell i = new ImageCell(){};
-		
 		columnDefs.add(cc1);columnDefs.add(cc2);columnDefs.add(cc3);columnDefs.add(cc4);columnDefs.add(cc5);
 		ColumnModel<Model> colModel = new ColumnModel<Model>(columnDefs);
 		grid = new Grid<Model>(store,colModel);
@@ -173,7 +171,14 @@ public class StateHubBrowser extends Composite
 					historyWidgets.add(resultsVlc.getWidget(i));
 				History.newItem("md");
 				resultsVlc.clear();
-				Label back = new Label("Back to resuts");
+				Label back = new Label("< Back to results");
+				back.addClickHandler(new ClickHandler(){
+
+					@Override
+					public void onClick(ClickEvent event)
+					{
+						History.back();
+					}});
 				back.setStylePrimaryName("backLabel");
 				resultsVlc.add(back);
 				resultsVlc.add(new ModelView(m));
