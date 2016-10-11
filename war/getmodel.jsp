@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/plain; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"
+<%@ page language="java" contentType="application/json; charset=UTF-8"
+	pageEncoding="UTF-8"
 	import="java.util.*,java.io.*,com.google.gson.Gson,org.statehub.client.data.*,com.google.gson.Gson,org.statehub.server.StateHubServiceImpl"%>
 <%
 try

@@ -10,6 +10,7 @@ import org.statehub.client.data.StateModel;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -20,10 +21,13 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -35,6 +39,8 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.CellClickEvent;
+import com.sencha.gxt.widget.core.client.event.CellClickEvent.CellClickHandler;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.TextArea;
@@ -63,6 +69,7 @@ public class StateHubBrowser extends Composite
 	ListStore<Model> store=new ListStore<Model>(properties.key());
 	Boolean isShowList = true;
 	ArrayList<Widget> listviewWidgets = new ArrayList<Widget>();
+	ArrayList<Widget> historyWidgets = new ArrayList<Widget>();
 	 RowExpander<Model> rowExpander = new RowExpander<Model>(new AbstractCell<Model>() {
 	        @Override
 	        public void render(Context context, Model value, SafeHtmlBuilder sb) {
@@ -104,6 +111,7 @@ public class StateHubBrowser extends Composite
 
 			@Override
 			public void onClick(ClickEvent event) {
+				History.newItem("", false);
 				if(isShowList)
 				{
 					listviewWidgets.clear();
@@ -132,11 +140,45 @@ public class StateHubBrowser extends Composite
 		ColumnConfig<Model, String> cc3 = new ColumnConfig<Model, String>(properties.description(), 400, "Description");
 		ColumnConfig<Model, String> cc4 = new ColumnConfig<Model, String>(properties.id(), 100, "Unique id");
 		ColumnConfig<Model, String> cc5 = new ColumnConfig<Model, String>(properties.revisionTxt(), 200, "revision");
+		ImageCell i = new ImageCell(){};
 		
 		columnDefs.add(cc1);columnDefs.add(cc2);columnDefs.add(cc3);columnDefs.add(cc4);columnDefs.add(cc5);
 		ColumnModel<Model> colModel = new ColumnModel<Model>(columnDefs);
 		grid = new Grid<Model>(store,colModel);
 		grid.getView().setAutoExpandColumn(cc3);
+		
+		History.addValueChangeHandler(new ValueChangeHandler<String>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event)
+			{
+				resultsVlc.clear();
+				for(Widget w : historyWidgets)
+					resultsVlc.add(w);
+			}
+		      
+		      
+		    });
+		
+		grid.addCellClickHandler(new CellClickHandler(){
+
+			@Override
+			public void onCellClick(CellClickEvent event)
+			{
+				if(event.getCellIndex()<1 || event.getCellIndex()==3 )
+					return;
+				Model m = store.get(event.getRowIndex());
+				historyWidgets.clear();
+				for(int i = 0; i < resultsVlc.getWidgetCount(); i++)
+					historyWidgets.add(resultsVlc.getWidget(i));
+				History.newItem("md");
+				resultsVlc.clear();
+				Label back = new Label("Back to resuts");
+				back.setStylePrimaryName("backLabel");
+				resultsVlc.add(back);
+				resultsVlc.add(new ModelView(m));
+				
+			}});
 		rowExpander.initPlugin(grid);
 	}
 	@UiHandler("searchButton")
@@ -153,8 +195,12 @@ public class StateHubBrowser extends Composite
 			public void onSuccess(ArrayList<Model> result) {
 				store.clear();
 				store.addAll(result);
+				listviewWidgets.clear();
+				isShowList = true;
 				resultsVlc.clear();
-				resultsVlc.add(new Label(result.size() + " models matched"));
+				Label hits = new Label(result.size() + " models matched");
+				hits.setStylePrimaryName("hitsLabel");
+				resultsVlc.add(hits);
 				for(final Model m : result)
 					if(searchText.getText().length()>0)
 						resultsVlc.add(new ModelView(m,searchText.getText()));
