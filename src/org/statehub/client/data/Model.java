@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Model implements Serializable
 {
@@ -14,6 +15,7 @@ public class Model implements Serializable
 	Timestamp revision;
 	String description;
 	ArrayList<State> states;
+	HashMap<String,ArrayList<String>> translation = new HashMap<String,ArrayList<String>>();
 	Tags tags;
 	
 	public String getKey()
@@ -172,5 +174,11 @@ public class Model implements Serializable
 	public void setCategory(String category)
 	{
 		this.category = category;
+	}
+	public HashMap<String, ArrayList<String>> getTranslation() {
+		return translation;
+	}
+	public void setTranslation(HashMap<String, ArrayList<String>> translation) {
+		this.translation = translation;
 	}
 }
