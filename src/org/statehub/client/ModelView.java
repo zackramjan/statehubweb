@@ -19,6 +19,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineHTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.Store;
@@ -46,9 +48,10 @@ public class ModelView extends Composite
 	@UiField FramedPanel panel;
     @UiField VerticalLayoutContainer vlc;
     @UiField VerticalLayoutContainer modelDetailsPanel;
-    @UiField FieldLabel nameLabel;
-    @UiField FieldLabel descLabel;
-    @UiField FieldLabel idLabel;
+    @UiField Label nameLabel;
+    @UiField Label descLabel;
+    @UiField Label idLabel;
+    @UiField InlineHTML tagsLabel;
 	private static final StateModel properties = GWT.create(StateModel.class);
 	private final StateHubServiceAsync statehubsvc = GWT.create(StateHubService.class);
 	ListStore<State> store=new ListStore<State>(properties.key());
@@ -77,6 +80,7 @@ public class ModelView extends Composite
 		nameLabel.setText("creator: " + model.getAuthor());
 		descLabel.setText("description: " + model.getDescription());
 		idLabel.setText("Unique ID: "  + model.getId());
+		tagsLabel.setHTML(model.getTags().toReadable());
 		
 		Image filterIcon = new Image("filter.png");
 		filterIcon.setPixelSize(30, 30);

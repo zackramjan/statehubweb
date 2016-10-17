@@ -29,7 +29,7 @@
 
   <container:VerticalLayoutContainer>
     <container:child layoutData="{topLayout}">
-      <c:FramedPanel heading="StateHub - ALPHA" ui:field="panel">
+      <c:FramedPanel heading="PROOF OF CONCEPT RELEASE (under heavy development)" ui:field="panel">
         <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="vlc">
 			<g:HorizontalPanel>
 				 <form:TextField ui:field="searchText" allowBlank="false" emptyText="Enter Search Text..." />
