@@ -54,3 +54,19 @@
 	color: darkblue;
 	font-family: 'Open Sans','Helvetica Neue',helvetica,arial,verdana,sans-serif;
 }
+
+.headerImage {
+	height: 30px;
+	vertical-align: middle;
+}
+
+.headerTxt
+{
+	margin-left: 20px;
+	vertical-align: middle;
+}
+
+.modelLabel
+{
+	font-family: 'Open Sans','Helvetica Neue',helvetica,arial,verdana,sans-serif;
+}

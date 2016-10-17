@@ -23,6 +23,7 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -84,6 +85,10 @@ public class StateHubBrowser extends Composite
 		initWidget(uiBinder.createAndBindUi(this));
 		panel.setWidth(com.google.gwt.user.client.Window.getClientWidth()-100);
 		panel.setHeight(com.google.gwt.user.client.Window.getClientHeight()-80);
+		SafeHtmlBuilder sb = new SafeHtmlBuilder();
+		sb.appendHtmlConstant("<img class=\"headerImage\" src=\"logoblue.png\"/>");
+		sb.appendHtmlConstant("<span class=\"headerTxt\">ALPHA PREVIEW RELEASE (features may be added/changed)</span>");
+		panel.setHeading(sb.toSafeHtml());
 		vlc.setScrollMode(ScrollMode.AUTO);
 		resultsVlc.setScrollMode(ScrollMode.AUTO);
 		com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler(){
