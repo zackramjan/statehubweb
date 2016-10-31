@@ -9,11 +9,14 @@
 }
 
 .stateTable0 {
-	background-color:gray;
+	background-color:lightgray;
 	overflow:auto;
 	height:100%;
 	width:100px;
 	display:block;
+	text-align: center;
+	color: gray;
+	font-style: italic;
 }
 
 .stateTable1 {
@@ -22,6 +25,7 @@
 	height:100%;
 	width:100px;
 	display:block;
+	text-align: center;
 }
 .stateTable2 {
 	background-color:pink;
@@ -29,6 +33,7 @@
 	height:100%;
 	width:100px;
 	display:block;
+	text-align: center;
 }
 .stateTable3 {
 	background-color:red;
@@ -36,6 +41,7 @@
 	height:100%;
 	width:100px;
 	display:block;
+	text-align: center;
 }
 .stateTable4 {
 	background-color:green;
@@ -43,6 +49,7 @@
 	height:100%;
 	width:100px;
 	display:block;
+	text-align: center;
 }
 
 .hitsLabel {

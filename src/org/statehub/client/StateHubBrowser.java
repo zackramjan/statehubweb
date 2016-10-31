@@ -235,6 +235,7 @@ public class StateHubBrowser extends Composite
 		importVLC.add(t);
 		TextButton doImportButton = new TextButton("import");
 		importVLC.add(doImportButton);
+		resultsVlc.clear();
 		resultsVlc.add(f);
 		f.add(importVLC);
 		doImportButton.addSelectHandler(new SelectHandler(){
