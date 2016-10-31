@@ -1,7 +1,9 @@
 package org.statehub.server;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Properties;
 import org.bson.Document;
 import org.statehub.client.StateHubService;
@@ -78,6 +80,8 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			String username = prop.getProperty("dbUser");
 			String password = prop.getProperty("dbPassword");
 			String database = prop.getProperty("dbName");
+			if(m.getRevision() == null)
+				m.setRevision(new Timestamp(new Date().getTime()));
 			MongoCredential credential = MongoCredential.createCredential(username, "admin", password.toCharArray());
 			MongoClient mongoClient = new MongoClient(new ServerAddress(prop.getProperty("dbServer")), Arrays.asList(credential));
 			MongoDatabase db = mongoClient.getDatabase(database);

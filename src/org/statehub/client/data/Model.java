@@ -102,45 +102,65 @@ public class Model implements Serializable
 		String[] features = lines[5].trim().split("\\s+");
 		
 		this.states = new ArrayList<State>();
+		
+		Boolean isStateDef = true;
+		
 		for(int i=6;i<lines.length;i++)
 		{
-			String stateDescription = "";
-			Tags stateTags = new Tags();
-			String stateFormat = "";
-			if(lines[i].contains("{") && lines[i].contains("}"))
-			{
-				stateFormat = lines[i].substring(lines[i].lastIndexOf("{"),lines[i].lastIndexOf("}")+1);
-				lines[i] = lines[i].substring(0,lines[i].lastIndexOf("{"));
-			}
-			String[] stateTokens = lines[i].split("\\s");
-			
-			State myState = new State();
-			myState.setName(stateTokens[0]);
-			myState.setOrder(i-5);
-			myState.setFormat(stateFormat);
-			ArrayList<Feature> stateFeatures = new ArrayList<Feature>();
-			
-			for (int j = 1;j<stateTokens.length;j++)				
-			{
-				if(j<=features.length)
+			if(lines[i].startsWith("---"))
+				isStateDef=false; //we are now defining translations
+			else if(isStateDef)
+			{	
+				//parse the state def row
+				String stateDescription = "";
+				Tags stateTags = new Tags();
+				String stateFormat = "";
+				if(lines[i].contains("{") && lines[i].contains("}"))
 				{
-					Feature f = new Feature();
-					f.setName(features[j-1]);
-					f.setOrder(j);
-					f.setScore(stateTokens[j].equals("NA") ? -1 : Float.valueOf(stateTokens[j]));
-					stateFeatures.add(f);
+					stateFormat = lines[i].substring(lines[i].lastIndexOf("{"),lines[i].lastIndexOf("}")+1);
+					lines[i] = lines[i].substring(0,lines[i].lastIndexOf("{"));
 				}
-				else
+				String[] stateTokens = lines[i].split("\\s");
+				
+				State myState = new State();
+				myState.setName(stateTokens[0]);
+				myState.setOrder(i-5);
+				myState.setFormat(stateFormat);
+				ArrayList<Feature> stateFeatures = new ArrayList<Feature>();
+				
+				for (int j = 1;j<stateTokens.length;j++)				
 				{
-					stateTags.add(stateTokens[j].replace("tag:", ""));
-					stateDescription += " " +  stateTokens[j].replace("tag:", "");
+					if(j<=features.length)
+					{
+						Feature f = new Feature();
+						f.setName(features[j-1]);
+						f.setOrder(j);
+						f.setScore(stateTokens[j].equals("NA") ? -1 : Float.valueOf(stateTokens[j]));
+						stateFeatures.add(f);
+					}
+					else
+					{
+						stateTags.add(stateTokens[j].replace("tag:", ""));
+						stateDescription += " " +  stateTokens[j].replace("tag:", "");
+					}
 				}
+				
+				myState.setFeatures(stateFeatures);
+				myState.setTags(stateTags);
+				myState.setDescription(stateDescription);
+				this.states.add(myState);
 			}
-			
-			myState.setFeatures(stateFeatures);
-			myState.setTags(stateTags);
-			myState.setDescription(stateDescription);
-			this.states.add(myState);
+			else 
+			{
+				//parse the translation row
+				String[] transTokens = lines[i].split("\\s");
+				if(transTokens.length < 3)
+					continue;
+				ArrayList<String> transList = new ArrayList<String>();
+				for (int j = 1;j<transTokens.length;j++)				
+					transList.add(transTokens[j]);
+				translation.put(transTokens[0], transList);
+			}
 		}
 	}
 	
@@ -163,6 +183,17 @@ public class Model implements Serializable
 				stateRow += f.getScore() + "\t";
 			ret += stateRow + s.getDescription() + "\t" + s.getFormat() + "\n";
 			
+		}
+		if(translation.keySet().size() > 0)
+		{
+			ret += "---\n";
+			for (String s : translation.keySet())
+			{
+				ret += s;
+				for(String m : translation.get(s))
+					ret += "\t" + m;
+				ret += "\n";
+			}		
 		}
 		
 		return ret;

@@ -31,7 +31,6 @@ import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.ViewReadyEvent;
 import com.sencha.gxt.widget.core.client.event.ViewReadyEvent.ViewReadyHandler;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
@@ -232,6 +231,8 @@ public class ModelView extends Composite
 					public void render(Context context,String value, SafeHtmlBuilder sb) 
 					{
 						String className = "stateTable" + (Integer.parseInt(value) + 1);
+						if(Integer.parseInt(value) == -1)
+							value="NA";
 						sb.appendHtmlConstant("<span class=\"" + className +"\" title=\"score is "+  value + "\">" + value + "</span>");
 					}	 
 				 });
@@ -267,6 +268,12 @@ public class ModelView extends Composite
 		store.setEnableFilters(true);
 		store.addFilter(filter);
 		panel.collapse();
+		if(store.size()==0)
+		{
+			store.setEnableFilters(false);
+			return;
+		}
+		
 		stateGrid.addViewReadyHandler(new ViewReadyHandler(){
 
 			@Override
@@ -275,10 +282,5 @@ public class ModelView extends Composite
 					rowExpander.expandRow(i);
 				isExpanded = true;
 			}});
-		
-		
-		
 	}
-
-
 }
