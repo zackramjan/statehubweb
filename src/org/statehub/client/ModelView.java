@@ -207,6 +207,17 @@ public class ModelView extends Composite
 		
 		List<ColumnConfig<State, ?>> columnDefs = new ArrayList<ColumnConfig<State, ?>>();
 		columnDefs.add(rowExpander);
+		ColumnConfig<State, Integer> cc0 = new ColumnConfig<State, Integer>(properties.order(), 20, "#");
+		cc0.setCell(new AbstractCell<Integer>() {
+			@Override
+			public void render(Context context,Integer value, SafeHtmlBuilder sb) 
+			{
+				sb.appendHtmlConstant("<span class=\"stateOrder\"  title=\"the order in which this state occurs\">" + value.toString() + "</span>");
+			}	 
+		 });
+		cc0.setCellPadding(false);
+		columnDefs.add(cc0);
+		
 		ColumnConfig<State, String> cc1 = new ColumnConfig<State, String>(properties.name(), 100, "Name");
 		cc1.setCellPadding(false);
 		cc1.setCell(new AbstractCell<String>() {
