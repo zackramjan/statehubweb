@@ -230,10 +230,23 @@ public class ModelView extends Composite
 					@Override
 					public void render(Context context,String value, SafeHtmlBuilder sb) 
 					{
+						String tooltip = "";
 						String className = "stateTable" + (Integer.parseInt(value) + 1);
 						if(Integer.parseInt(value) == -1)
+						{
 							value="NA";
-						sb.appendHtmlConstant("<span class=\"" + className +"\" title=\"score is "+  value + "\">" + value + "</span>");
+							tooltip = "This mark is irrelevant to this state";
+						}
+						else if(Integer.parseInt(value) == 0)
+							tooltip = " If this mark is present, it should not overlap with this state";
+						else if(Integer.parseInt(value) == 1)
+							tooltip = "If this mark is present, it should overlap with this state";
+						else if(Integer.parseInt(value) == 2)
+							tooltip = "This mark must be present, and must not overlap with this state";
+						else if(Integer.parseInt(value) == 3)
+							tooltip = "This mark must be present, and must overlap with this state";
+						
+						sb.appendHtmlConstant("<span class=\"" + className +"\" title=\"" + tooltip + "\">"+ value + "</span>");
 					}	 
 				 });
 		}
