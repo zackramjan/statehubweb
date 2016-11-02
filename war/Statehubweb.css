@@ -8,6 +8,10 @@
     -o-transform       : rotate(90deg);
 }
 
+.stateOrder {
+	
+}
+
 .stateTable0, .stateTable1, .stateTable2, .stateTable3, .stateTable4 {
 	overflow:auto;
 	height:100%;
