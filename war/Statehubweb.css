@@ -8,48 +8,38 @@
     -o-transform       : rotate(90deg);
 }
 
-.stateTable0 {
-	background-color:lightgray;
+.stateTable0, .stateTable1, .stateTable2, .stateTable3, .stateTable4 {
 	overflow:auto;
 	height:100%;
 	width:100px;
 	display:block;
-	text-align: center;
-	color: gray;
+	text-align: center;	
 	font-style: italic;
+}
+
+.stateTable0 {
+	background-color:lightgray;
+	color: gray;
 }
 
 .stateTable1 {
 	background-color:rosybrown;
-	overflow:auto;
-	height:100%;
-	width:100px;
-	display:block;
-	text-align: center;
+	color: black;
 }
+
 .stateTable2 {
 	background-color:pink;
-	overflow:auto;
-	height:100%;
-	width:100px;
-	display:block;
-	text-align: center;
+	color: black;
+	
 }
+
 .stateTable3 {
 	background-color:red;
-	overflow:auto;
-	height:100%;
-	width:100px;
-	display:block;
-	text-align: center;
+	color: black;	
 }
 .stateTable4 {
 	background-color:green;
-	overflow:auto;
-	height:100%;
-	width:100px;
-	display:block;
-	text-align: center;
+	color: black;	
 }
 
 .hitsLabel {
