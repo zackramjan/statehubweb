@@ -9,7 +9,7 @@ try
 	String id = request.getParameter("id");
 	ArrayList<Model> full = backend.getModel(search);
 	ArrayList<Model> filtered = new ArrayList<Model>();
-	if(id != null && id.length() > 10)
+	if(id != null && id.length() > 0)
 	{
 	 	for(Model m : full)
 	 		if(m.getId().contains(id))
