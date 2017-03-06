@@ -16,8 +16,26 @@
   </ui:with>
 
   <ui:with type="com.sencha.gxt.core.client.util.Margins" field="topFormMargins">
-    <ui:attributes top="15" right="15" bottom="15" left="15" />
+    <ui:attributes top="15" right="5" bottom="15" left="15" />
   </ui:with>
+  
+  <ui:with type="com.sencha.gxt.core.client.util.Margins" field="westMargins">
+    <ui:attributes top="0" right="5" bottom="0" left="5" />
+  </ui:with>
+  
+   <ui:with type="com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData" field="westData">
+    <ui:attributes size="150" margins="{westMargins}" collapsible="true" collapseHeaderVisible="true" split="true" />
+  </ui:with>
+  
+  
+  <ui:with type="com.sencha.gxt.core.client.util.Margins" field="centerMargins">
+    <ui:attributes top="0" right="0" bottom="0" left="0" />
+  </ui:with>
+  <ui:with type="com.sencha.gxt.widget.core.client.container.MarginData" field="centerData">
+    <ui:attributes margins="{centerMargins}" />
+  </ui:with>
+  
+  
 
 <!--   <ui:with type="com.sencha.gxt.widget.core.client.container.MarginData" field="topFormMarginData"> -->
 <!--     <ui:attributes margins="{topFormMargins}" /> -->
@@ -27,18 +45,56 @@
     <ui:attributes width="1" height="1"  margins="{topFormMargins}" />
   </ui:with>
 
-  <container:VerticalLayoutContainer>
-    <container:child layoutData="{topLayout}">
-      <c:FramedPanel heading="PROOF OF CONCEPT RELEASE (under heavy development)" ui:field="panel">
+ <container:BorderLayoutContainer ui:field="borderLayout" stylePrimaryName="borderlayout" >
+ 	<container:west layoutData="{westData}">
+      <c:ContentPanel heading="Navigate" ui:field="navPanel" >
+	      <g:HTMLPanel ui:field="frontPageIntro">
+		        <table>
+		        <tr>
+		        	<td></td>
+		        	<td class="navText">
+		        		<h3>StatePaintR</h3><br/>
+		        		<a href="https://github.com/Simon-Coetzee/StatePaintR">GitHub Project</a><br/>
+		        		<a href="https://github.com/Simon-Coetzee/StateHub">Rules</a><br/>
+		        		<a href="https://www.ncbi.nlm.nih.gov/pubmed">Paper</a><br/><br/>
+		        		
+		        		<h3>Tracks</h3><br/>
+		        		<a href="Statehubweb.html?search=encode">Encode Tracks</a><br/>
+		        		<a href="Statehubweb.html?search=roadmap">Roadmap Tracks</a><br/>
+		        		<a href="Statehubweb.html?search=blueprint">Blueprint Tracks</a><br/>
+		        		<a href="Statehubweb.html?search=ihec">IHEC Tracks</a><br/><br/>
+		        		
+		        		<h3>News</h3><br/>
+		        		<a href="https://twitter.com/CedarsSinai" >Twitter Feed</a><br/>
+		        		
+		        	</td>
+		        </tr>
+		        </table>
+	        </g:HTMLPanel>
+        </c:ContentPanel>
+    </container:west>
+  <container:center layoutData="{centerData}">
+      <c:ContentPanel heading="PROOF OF CONCEPT RELEASE (under heavy development)"  ui:field="panel">
         <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="vlc">
-			<g:HorizontalPanel>
+        	<g:HorizontalPanel>
 				 <form:TextField ui:field="searchText" allowBlank="false" emptyText="Enter Search Text..." />
 				 <button:TextButton text="Search" ui:field="searchButton"/><button:TextButton text="import" ui:field="importButton"/>
 			</g:HorizontalPanel>
-			<container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="resultsVlc"/>
-       </container:VerticalLayoutContainer>
-      </c:FramedPanel>
-    </container:child>
-  </container:VerticalLayoutContainer>
+			<container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="resultsVlc">
+				 <g:HTMLPanel>
+				 	<img src="statehubfig1.png"/><br/>
+				 	<h2 class="navText" >some description....</h2>
+				 </g:HTMLPanel>
+			</container:VerticalLayoutContainer>
+		</container:VerticalLayoutContainer>
+      </c:ContentPanel>
+ 	</container:center>
+ 
+ 
+ 
+ 
+ 
+ </container:BorderLayoutContainer>
+ 
 
 </ui:UiBinder>

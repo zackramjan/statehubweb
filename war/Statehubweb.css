@@ -1,11 +1,8 @@
 /** Add css rules here for your application. */
 
 
-.css-vertical-text {
-    filter         : progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-    -webkit-transform  : rotate(90deg);
-    -moz-transform     : rotate(90deg);
-    -o-transform       : rotate(90deg);
+.borderlayout {
+	background-color: white;
 }
 
 .stateOrder {
@@ -57,7 +54,7 @@
 }
 
 .headerImage {
-	height: 30px;
+	height: 20px;
 	vertical-align: middle;
 }
 
@@ -68,6 +65,11 @@
 }
 
 .modelLabel
+{
+	font-family: 'Open Sans','Helvetica Neue',helvetica,arial,verdana,sans-serif;
+}
+
+.navText
 {
 	font-family: 'Open Sans','Helvetica Neue',helvetica,arial,verdana,sans-serif;
 }

@@ -25,13 +25,16 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.CellClickEvent;
 import com.sencha.gxt.widget.core.client.event.CellClickEvent.CellClickHandler;
@@ -52,7 +55,10 @@ public class StateHubBrowser extends Composite
 	private final StateHubServiceAsync statehubsvc = GWT.create(StateHubService.class);
 	interface StateHubBrowserUiBinder extends UiBinder<Widget, StateHubBrowser> 	{}
 
-	@UiField FramedPanel panel;
+	@UiField BorderLayoutContainer borderLayout;
+	@UiField ContentPanel panel;
+	@UiField ContentPanel navPanel;
+	@UiField HTMLPanel frontPageIntro;
     @UiField VerticalLayoutContainer vlc;
     @UiField VerticalLayoutContainer resultsVlc;
 	@UiField TextButton searchButton;
@@ -76,8 +82,8 @@ public class StateHubBrowser extends Composite
 	public StateHubBrowser()
 	{
 		initWidget(uiBinder.createAndBindUi(this));
-		panel.setWidth(com.google.gwt.user.client.Window.getClientWidth()-100);
-		panel.setHeight(com.google.gwt.user.client.Window.getClientHeight()-80);
+		panel.setWidth(com.google.gwt.user.client.Window.getClientWidth() - (navPanel.getOffsetWidth()));
+		panel.setHeight(com.google.gwt.user.client.Window.getClientHeight()-20);
 		SafeHtmlBuilder sb = new SafeHtmlBuilder();
 		sb.appendHtmlConstant("<img class=\"headerImage\" src=\"logoblue.png\"/>");
 		sb.appendHtmlConstant("<span class=\"headerTxt\">ALPHA PREVIEW RELEASE (features may be added/changed)</span>");
@@ -89,8 +95,8 @@ public class StateHubBrowser extends Composite
 			@Override
 			public void onResize(ResizeEvent event)
 			{
-				panel.setWidth(event.getWidth()-100);
-				panel.setHeight(event.getHeight()-200);
+				panel.setWidth(event.getWidth()-200);
+				panel.setHeight(event.getHeight()-20);
 			}});
 		
 		searchText.addKeyDownHandler(new KeyDownHandler(){
@@ -152,9 +158,7 @@ public class StateHubBrowser extends Composite
 				for(Widget w : historyWidgets)
 					resultsVlc.add(w);
 			}
-		      
-		      
-		    });
+	    });
 		
 		grid.addCellClickHandler(new CellClickHandler(){
 
@@ -183,10 +187,23 @@ public class StateHubBrowser extends Composite
 				
 			}});
 		rowExpander.initPlugin(grid);
+		
+		
+		//read GET string in URL and do search if text was passed. this is to handle links
+		String searchGET = com.google.gwt.user.client.Window.Location.getParameter("search");
+		if(searchGET != null && searchGET.length() > 1)
+		{
+			searchText.setText(searchGET);
+			find(null);
+		}
+		
+		
+		
 	}
 	@UiHandler("searchButton")
 	public void find(SelectEvent event)
 	{
+		resultsVlc.clear();
 		statehubsvc.getModel(searchText.getText(), new AsyncCallback<ArrayList<Model>>(){
 
 			@Override
@@ -200,7 +217,6 @@ public class StateHubBrowser extends Composite
 				store.addAll(result);
 				listviewWidgets.clear();
 				isShowList = true;
-				resultsVlc.clear();
 				Label hits = new Label(result.size() + " models matched");
 				hits.setStylePrimaryName("hitsLabel");
 				resultsVlc.add(hits);
@@ -244,7 +260,6 @@ public class StateHubBrowser extends Composite
 					@Override
 					public void onFailure(Throwable caught) {
 						Info.display("Error importing",caught.getMessage());
-						
 					}
 
 					@Override
@@ -258,6 +273,5 @@ public class StateHubBrowser extends Composite
 	private void showModel(final Model m)
 	{
 		resultsVlc.add(new ModelView(m));
-		
 	}
 }
