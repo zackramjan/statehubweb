@@ -25,6 +25,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -58,7 +59,7 @@ public class StateHubBrowser extends Composite
 	@UiField BorderLayoutContainer borderLayout;
 	@UiField ContentPanel panel;
 	@UiField ContentPanel navPanel;
-	@UiField HTMLPanel frontPageIntro;
+	//@UiField HTMLPanel frontPageIntro;
     @UiField VerticalLayoutContainer vlc;
     @UiField VerticalLayoutContainer resultsVlc;
 	@UiField TextButton searchButton;
@@ -84,6 +85,7 @@ public class StateHubBrowser extends Composite
 		initWidget(uiBinder.createAndBindUi(this));
 		panel.setWidth(com.google.gwt.user.client.Window.getClientWidth() - (navPanel.getOffsetWidth()));
 		panel.setHeight(com.google.gwt.user.client.Window.getClientHeight()-20);
+		//insertNavFrame();
 		SafeHtmlBuilder sb = new SafeHtmlBuilder();
 		sb.appendHtmlConstant("<img class=\"headerImage\" src=\"logoblue.png\"/>");
 		sb.appendHtmlConstant("<span class=\"headerTxt\">ALPHA PREVIEW RELEASE (features may be added/changed)</span>");
@@ -97,6 +99,7 @@ public class StateHubBrowser extends Composite
 			{
 				panel.setWidth(event.getWidth()-200);
 				panel.setHeight(event.getHeight()-20);
+				//insertNavFrame();
 			}});
 		
 		searchText.addKeyDownHandler(new KeyDownHandler(){
@@ -187,7 +190,14 @@ public class StateHubBrowser extends Composite
 				
 			}});
 		rowExpander.initPlugin(grid);
-		
+		insertNavFrame();
+		navPanel.addResizeHandler(new ResizeHandler(){
+
+			@Override
+			public void onResize(ResizeEvent event)
+			{
+				//insertNavFrame();				
+			}});
 		
 		//read GET string in URL and do search if text was passed. this is to handle links
 		String searchGET = com.google.gwt.user.client.Window.Location.getParameter("search");
@@ -273,5 +283,16 @@ public class StateHubBrowser extends Composite
 	private void showModel(final Model m)
 	{
 		resultsVlc.add(new ModelView(m));
+	}
+	
+	private void insertNavFrame()
+	{
+		Frame f = new Frame("nav.html");
+		f.setStylePrimaryName("navIframe");
+		//Info.display("size","" + (com.google.gwt.user.client.Window.getClientHeight()-50));
+		//navPanel.clear();
+		//navPanel.setHeight(com.google.gwt.user.client.Window.getClientHeight()-50);
+		navPanel.add(f);
+		
 	}
 }

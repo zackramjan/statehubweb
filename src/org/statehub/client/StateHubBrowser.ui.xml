@@ -47,30 +47,7 @@
 
  <container:BorderLayoutContainer ui:field="borderLayout" stylePrimaryName="borderlayout" >
  	<container:west layoutData="{westData}">
-      <c:ContentPanel heading="Navigate" ui:field="navPanel" >
-	      <g:HTMLPanel ui:field="frontPageIntro">
-		        <table>
-		        <tr>
-		        	<td></td>
-		        	<td class="navText">
-		        		<h3>StatePaintR</h3><br/>
-		        		<a href="https://github.com/Simon-Coetzee/StatePaintR">GitHub Project</a><br/>
-		        		<a href="https://github.com/Simon-Coetzee/StateHub">Rules</a><br/>
-		        		<a href="https://www.ncbi.nlm.nih.gov/pubmed">Paper</a><br/><br/>
-		        		
-		        		<h3>Tracks</h3><br/>
-		        		<a href="Statehubweb.html?search=encode">Encode Tracks</a><br/>
-		        		<a href="Statehubweb.html?search=roadmap">Roadmap Tracks</a><br/>
-		        		<a href="Statehubweb.html?search=blueprint">Blueprint Tracks</a><br/>
-		        		<a href="Statehubweb.html?search=ihec">IHEC Tracks</a><br/><br/>
-		        		
-		        		<h3>News</h3><br/>
-		        		<a href="https://twitter.com/CedarsSinai" >Twitter Feed</a><br/>
-		        		
-		        	</td>
-		        </tr>
-		        </table>
-	        </g:HTMLPanel>
+      <c:ContentPanel heading="Navigate" ui:field="navPanel" stylePrimaryName="navPanel" height="3000">
         </c:ContentPanel>
     </container:west>
   <container:center layoutData="{centerData}">

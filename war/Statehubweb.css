@@ -73,3 +73,17 @@
 {
 	font-family: 'Open Sans','Helvetica Neue',helvetica,arial,verdana,sans-serif;
 }
+
+.navText > h3
+
+{
+	padding:0px;
+	margin:0px;
+}
+
+.navIframe
+{
+	border: 0px;
+	 border-right: 2px dotted #4d90d7;
+	
+}
