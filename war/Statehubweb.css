@@ -5,8 +5,7 @@
 	background-color: white;
 }
 
-.stateOrder {
-	
+.stateOrder {	
 }
 
 .stateTable0, .stateTable1, .stateTable2, .stateTable3, .stateTable4 {
@@ -43,6 +42,12 @@
 	color: black;	
 }
 
+
+.searchButton
+{
+	margin-top: 5px;
+}
+
 .hitsLabel {
 		font-family: 'Open Sans','Helvetica Neue',helvetica,arial,verdana,sans-serif;
 		margin-bottom: 4px;
@@ -75,15 +80,18 @@
 }
 
 .navText > h3
-
 {
 	padding:0px;
 	margin:0px;
 }
 
+.navPanel
+{
+	 border-right: 2px dotted #4d90d7;
+}
+
 .navIframe
 {
 	border: 0px;
-	 border-right: 2px dotted #4d90d7;
-	
+	height: 700px;
 }

@@ -24,7 +24,7 @@
   </ui:with>
   
    <ui:with type="com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData" field="westData">
-    <ui:attributes size="150" margins="{westMargins}" collapsible="true" collapseHeaderVisible="true" split="true" />
+    <ui:attributes size="180" margins="{westMargins}" collapsible="true" collapseHeaderVisible="true" split="true" />
   </ui:with>
   
   
@@ -47,17 +47,24 @@
 
  <container:BorderLayoutContainer ui:field="borderLayout" stylePrimaryName="borderlayout" >
  	<container:west layoutData="{westData}">
-      <c:ContentPanel heading="Navigate" ui:field="navPanel" stylePrimaryName="navPanel" height="3000">
+      <c:ContentPanel heading="Navigate" ui:field="navPanel"  height="3000">
+      <container:VerticalLayoutContainer stylePrimaryName="navPanel" height="1000">
+	      <g:HorizontalPanel>
+				<form:TextField ui:field="searchText" allowBlank="false" stylePrimaryName="searchButton" emptyText="Enter Search Text..."  width="120"/>
+				<button:TextButton text="Search" stylePrimaryName="searchButton" ui:field="searchButton"/>
+			</g:HorizontalPanel>
+<!--       	<button:TextButton text="import" ui:field="importButton"/>  -->
+	
+      	<container:VerticalLayoutContainer ui:field="navPanelVC" height="1000"/>
+      </container:VerticalLayoutContainer>
+      
+      
         </c:ContentPanel>
     </container:west>
   <container:center layoutData="{centerData}">
       <c:ContentPanel heading="PROOF OF CONCEPT RELEASE (under heavy development)"  ui:field="panel">
         <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="vlc">
-        	<g:HorizontalPanel>
-				 <form:TextField ui:field="searchText" allowBlank="false" emptyText="Enter Search Text..." />
-				 <button:TextButton text="Search" ui:field="searchButton"/><button:TextButton text="import" ui:field="importButton"/>
-			</g:HorizontalPanel>
-			<container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="resultsVlc">
+        	<container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="resultsVlc">
 				 <g:HTMLPanel>
 				 	<img src="statehubfig1.png"/><br/>
 				 	<h2 class="navText" >some description....</h2>
@@ -66,11 +73,6 @@
 		</container:VerticalLayoutContainer>
       </c:ContentPanel>
  	</container:center>
- 
- 
- 
- 
- 
  </container:BorderLayoutContainer>
  
 
