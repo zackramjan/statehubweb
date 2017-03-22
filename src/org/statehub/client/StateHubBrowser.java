@@ -227,7 +227,7 @@ public class StateHubBrowser extends Composite
 				store.addAll(result);
 				listviewWidgets.clear();
 				isShowList = true;
-				Label hits = new Label(result.size() + " models matched");
+				Label hits = new Label(result.size() + " models found");
 				hits.setStylePrimaryName("hitsLabel");
 				resultsVlc.add(hits);
 				for(final Model m : result)
