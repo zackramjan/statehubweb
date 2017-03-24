@@ -17,6 +17,7 @@ public class Model implements Serializable
 	ArrayList<State> states;
 	HashMap<String,ArrayList<String>> translation = new HashMap<String,ArrayList<String>>();
 	Tags tags;
+	ArrayList<Track> tracks;
 	
 	public String getKey()
 	{
@@ -211,5 +212,11 @@ public class Model implements Serializable
 	}
 	public void setTranslation(HashMap<String, ArrayList<String>> translation) {
 		this.translation = translation;
+	}
+	public ArrayList<Track> getTracks() {
+		return tracks;
+	}
+	public void setTracks(ArrayList<Track> tracks) {
+		this.tracks = tracks;
 	}
 }
