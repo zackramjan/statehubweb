@@ -35,10 +35,11 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			String username = prop.getProperty("dbUser");
 			String password = prop.getProperty("dbPassword");
 			String database = prop.getProperty("dbName");
+			String collectionName = prop.getProperty("dbCollection");
 			MongoCredential credential = MongoCredential.createCredential(username, "admin", password.toCharArray());
 			MongoClient mongoClient = new MongoClient(new ServerAddress(prop.getProperty("dbServer")), Arrays.asList(credential));
 			MongoDatabase db = mongoClient.getDatabase(database);
-			MongoCollection<Document> collection = db.getCollection("models");
+			MongoCollection<Document> collection = db.getCollection(collectionName);
 			//.collection.collection.cre
 			if(search != null && search.length() > 1)
 			{
@@ -80,12 +81,13 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			String username = prop.getProperty("dbUser");
 			String password = prop.getProperty("dbPassword");
 			String database = prop.getProperty("dbName");
+			String collectionName = prop.getProperty("dbCollection");
 			if(m.getRevision() == null)
 				m.setRevision(new Timestamp(new Date().getTime()));
 			MongoCredential credential = MongoCredential.createCredential(username, "admin", password.toCharArray());
 			MongoClient mongoClient = new MongoClient(new ServerAddress(prop.getProperty("dbServer")), Arrays.asList(credential));
 			MongoDatabase db = mongoClient.getDatabase(database);
-			MongoCollection<Document> collection = db.getCollection("models");
+			MongoCollection<Document> collection = db.getCollection(collectionName);
 			collection.insertOne(Document.parse(toJson(m)));
 			mongoClient.close();
 		} catch (Exception e)

@@ -204,7 +204,7 @@ public class StateHubBrowser extends Composite
 		
 		//read GET string in URL and do search if text was passed. this is to handle links
 		String searchGET = com.google.gwt.user.client.Window.Location.getParameter("search");
-		if(searchGET != null && searchGET.length() > 1)
+		if(searchGET != null )
 		{
 			searchText.setText(searchGET);
 			find(null);
