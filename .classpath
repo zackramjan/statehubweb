@@ -15,6 +15,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-databind-2.8.7.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-annotations-2.8.7.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/joda-time-2.9.9.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/aws-java-sdk-1.11.109.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/aws-java-sdk-core-1.11.109.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
