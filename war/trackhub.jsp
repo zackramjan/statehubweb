@@ -33,18 +33,22 @@ try
 	}
 	else if(id != null && id.length() > 0 && tracks.size() > 0 && genomes != null && trackdb != null)
 	{
+		String s = "";
 		for(Track t : tracks)
 		{
 			if(t.getGenome().equals(genomes))
 			{
-				out.println("track " + t.getFilename());
-				out.println("bigDataUrl " + t.getUrlBigBed());
-				out.println("shortLabel " + t.getFilename() + " " + t.getMark() + " " + t.getSegfile());
-				out.println("LongLabel " + t.getFilename() + " " + t.getMark() + " " + t.getSegfile());
-				out.println("type bigBed ");
-				out.println("");
+				s+="track " + t.getFilename().replace(" ","_") + "\n";
+				s+="bigDataUrl " + t.getUrlBigBed()+ "\n";
+				s+="shortLabel " + t.getFilename() + " " + t.getMark() + " " + t.getSegfile() + "\n";
+				s+="longLabel " + t.getFilename() + " " + t.getMark() + " " + t.getSegfile() + "\n";
+				s+="type bigBed\n";
+				s+="\n";
+				
 			}
 		}
+		response.setContentLength(s.getBytes().length);
+		out.print(s);
 	}
 	
 	
