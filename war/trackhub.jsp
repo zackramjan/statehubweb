@@ -41,7 +41,7 @@ try
 			{
 				s+="track " + t.getFilename().replace(" ","_").substring(0, t.getFilename().lastIndexOf(".",t.getFilename().lastIndexOf(".")-1))  + "\n";
 				s+="bigDataUrl " + t.getUrlBigBed()+ "\n";
-				s+="shortLabel " + t.getFilename().substring(0, t.getFilename().lastIndexOf(".",t.getFilename().lastIndexOf(".")-1))  + "\n";
+				s+="shortLabel " + t.getProject() + " " + t.getFilename().substring(0, t.getFilename().lastIndexOf(".",t.getFilename().lastIndexOf(".")-1))  + "\n";
 				s+="longLabel " + t.getFilename() + " " + t.getMark() + " " + t.getSegfile() + "\n";
 				s+="type bigBed\n";
 				s+="\n";
