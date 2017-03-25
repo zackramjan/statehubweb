@@ -9,10 +9,11 @@ try
 	String trackdb = request.getParameter("trackdb");
 	
 	ArrayList<Track> tracks = backend.getTrack(id);
+	 	
 	if(id != null && id.length() > 0 && tracks.size() > 0 && genomes == null)
 	{
 		out.println("hub StateHub");
-		out.println("shortLabel StateHub Tracks for model");
+		out.println("shortLabel StateHub.org Tracks for model " + id);
 		out.println("longLabel StateHub Tracks for model, Berman Lab at Cedars Sinai Hospital in Los angeles");
 		out.println("genomesFile trackhub.jsp?id=" + id + "&genomes");
 		out.println("email help@statehub.org");
@@ -38,12 +39,13 @@ try
 		{
 			if(t.getGenome().equals(genomes))
 			{
-				s+="track " + t.getFilename().replace(" ","_") + "\n";
+				s+="track " + t.getFilename().replace(" ","_").substring(0, t.getFilename().lastIndexOf(".",t.getFilename().lastIndexOf(".")-1))  + "\n";
 				s+="bigDataUrl " + t.getUrlBigBed()+ "\n";
-				s+="shortLabel " + t.getFilename() + " " + t.getMark() + " " + t.getSegfile() + "\n";
+				s+="shortLabel " + t.getFilename().substring(0, t.getFilename().lastIndexOf(".",t.getFilename().lastIndexOf(".")-1))  + "\n";
 				s+="longLabel " + t.getFilename() + " " + t.getMark() + " " + t.getSegfile() + "\n";
 				s+="type bigBed\n";
 				s+="\n";
+				
 				
 			}
 		}
