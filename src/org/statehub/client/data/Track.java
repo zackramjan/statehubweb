@@ -10,7 +10,13 @@ public class Track implements Serializable
 	String project;
 	String genome;
 	String filename;
-	String url;
+	String urlBed;
+	String urlBigBed;
+	
+	public String toString()
+	{
+		return genome + "\t" + project + "\t" + filename + "\t" + "\t" + mark + "\t" + segfile + "\t" + urlBed + "\t" + urlBigBed; 
+	}
 	
 	public String getKey() {
 		return filename;
@@ -53,10 +59,20 @@ public class Track implements Serializable
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-	public String getUrl() {
-		return url;
+	public String getUrlBed() {
+		return urlBed;
 	}
-	public void setUrl(String url) {
-		this.url = url;
+	public void setUrlBed(String url) {
+		this.urlBed = url;
+	}
+	
+	public String getUrlBigBed()
+	{
+		return urlBigBed;
+	}
+
+	public void setUrlBigBed(String urlBigBed)
+	{
+		this.urlBigBed = urlBigBed;
 	}
 }

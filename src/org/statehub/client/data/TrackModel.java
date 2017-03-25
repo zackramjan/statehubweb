@@ -12,5 +12,6 @@ public interface TrackModel extends PropertyAccess<Track>
 	ValueProvider<Track, String> project();
 	ValueProvider<Track, String> genome();
 	ValueProvider<Track, String> filename();
-	ValueProvider<Track, String> url();
+	ValueProvider<Track, String> urlBed();
+	ValueProvider<Track, String> urlBigBed();
 }
