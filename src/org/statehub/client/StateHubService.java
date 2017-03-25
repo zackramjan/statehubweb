@@ -16,4 +16,5 @@ public interface StateHubService extends RemoteService
 	Integer storeModel(Model m);
 	String toJson(Model m);
 	Model fromJson(String s);
+	ArrayList<Track> getTrack(String id);
 }
