@@ -44,7 +44,6 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 	public ArrayList<Model> getModel(String search)
 	{
 		
-		try{getTrack("5813b67f46e0fb06b493ceb0");} catch(Exception e){e.printStackTrace();}
 		System.err.println("searching mongo for "+ search);
 		ArrayList<Model> models = new ArrayList<Model>();
 		Properties prop = new Properties();
