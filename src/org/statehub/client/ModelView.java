@@ -28,6 +28,7 @@ import com.sencha.gxt.data.shared.Store.StoreFilter;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.TabPanel;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.ViewReadyEvent;
 import com.sencha.gxt.widget.core.client.event.ViewReadyEvent.ViewReadyHandler;
@@ -45,12 +46,14 @@ public class ModelView extends Composite
 
 	interface ModelViewUiBinder extends UiBinder<Widget, ModelView>	{}
 	@UiField FramedPanel panel;
-    @UiField VerticalLayoutContainer vlc;
+    @UiField VerticalLayoutContainer statesGridPanel;
+    @UiField VerticalLayoutContainer tracksPanel;
     @UiField VerticalLayoutContainer modelDetailsPanel;
     @UiField Label nameLabel;
     @UiField Label descLabel;
     @UiField Label idLabel;
     @UiField InlineHTML tagsLabel;
+    //@UiField TabPanel tabPanel;
 	private static final StateModel properties = GWT.create(StateModel.class);
 	private final StateHubServiceAsync statehubsvc = GWT.create(StateHubService.class);
 	ListStore<State> store=new ListStore<State>(properties.key());
@@ -72,13 +75,14 @@ public class ModelView extends Composite
 	
 	{
 		initWidget(uiBinder.createAndBindUi(this));
+		
 		this.model = model;
 		panel.setCollapsible(true);
 		panel.setBorders(false);
-		panel.setHeading(model.getName() + "  (" + model.getCategory() + ") - revision: " + model.getRevision());
-		nameLabel.setText("creator: " + model.getAuthor());
-		descLabel.setText("description: " + model.getDescription());
-		idLabel.setText("Unique ID: "  + model.getId());
+		panel.setHeading(model.getName() + "  (" + model.getCategory() + ") - revision: " + model.getRevision().toString().replace(".000000000", ""));
+		nameLabel.setText(model.getAuthor());
+		descLabel.setText(model.getDescription());
+		idLabel.setText(model.getId());
 		tagsLabel.setHTML(model.getTags().toReadable());
 		
 		Image filterIcon = new Image("filter.png");
@@ -268,7 +272,8 @@ public class ModelView extends Composite
 		store.addAll(model.getStates());
 		stateGrid = new Grid<State>(store,colModel);
 		rowExpander.initPlugin(stateGrid);
-		vlc.add(stateGrid);
+		statesGridPanel.add(stateGrid);
+		tracksPanel.add(new TrackTable(model.getId()));
 		
 	}
 	public ModelView(Model model, final String search)

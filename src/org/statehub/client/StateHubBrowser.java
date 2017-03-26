@@ -26,11 +26,9 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.Style.LayoutRegion;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
@@ -218,6 +216,10 @@ public class StateHubBrowser extends Composite
 	{
 		
 		resultsVlc.clear();
+		Image progress = new Image("progress.gif");
+		progress.setHeight("200px");
+		progress.setWidth("200px");
+		resultsVlc.add(progress);
 		statehubsvc.getModel(searchText.getText(), new AsyncCallback<ArrayList<Model>>(){
 
 			@Override
@@ -227,6 +229,7 @@ public class StateHubBrowser extends Composite
 
 			@Override
 			public void onSuccess(ArrayList<Model> result) {
+				resultsVlc.clear();
 				store.clear();
 				store.addAll(result);
 				listviewWidgets.clear();
@@ -294,10 +297,7 @@ public class StateHubBrowser extends Composite
 		
 		Frame f = new Frame("nav.html");
 		f.setStylePrimaryName("navIframe");
-		//Info.display("size","" + (com.google.gwt.user.client.Window.getClientHeight()-50));
-		//navPanel.clear();
 		navPanel.setHeight(com.google.gwt.user.client.Window.getClientHeight()-50);
-		navPanelVC.setHeight(com.google.gwt.user.client.Window.getClientHeight()-50);
 		navPanelVC.setHeight(com.google.gwt.user.client.Window.getClientHeight()-50);
 		navPanelVC.clear();
 		navPanelVC.add(f);

@@ -159,6 +159,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			            Track t = new Track();
 			            if( objectSummary.getSize() > 0 && p.getNameCount()>4 && objectSummary.getKey().toLowerCase().endsWith("bed"))
 			            {
+			            	t.setOrder(i);
 			            	t.setGenome(p.subpath(2, 3).toString());
 			            	t.setProject(p.subpath(3, 4).toString());
 			            	t.setFilename(p.subpath(4, 5).toString());

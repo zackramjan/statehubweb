@@ -72,6 +72,15 @@
 .modelLabel
 {
 	font-family: 'Open Sans','Helvetica Neue',helvetica,arial,verdana,sans-serif;
+	font-weight:bold;
+	padding-right: 10px;
+}
+
+.modelLabelText
+{
+	font-family: 'Open Sans','Helvetica Neue',helvetica,arial,verdana,sans-serif;
+	white-space: nowrap;
+	
 }
 
 .navText
@@ -95,3 +104,14 @@
 	border: 0px;
 	height: 700px;
 }
+
+.tracksHeader
+{
+	height:30px;
+	width:600px;
+}
+
+.tabpanel
+{
+	background-color: #cdd6e0 !important;
+} 
