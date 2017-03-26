@@ -12,6 +12,7 @@ public class Track implements Serializable
 	String filename;
 	String urlBed;
 	String urlBigBed;
+	Integer order;
 	
 	public String toString()
 	{
@@ -19,11 +20,11 @@ public class Track implements Serializable
 	}
 	
 	public String getKey() {
-		return filename;
+		return urlBed;
 	}
 	
 	public void setKey(String key) {
-		this.filename = key;
+		this.urlBed = key;
 	}
 	
 	public String getSegfile() {
@@ -74,5 +75,15 @@ public class Track implements Serializable
 	public void setUrlBigBed(String urlBigBed)
 	{
 		this.urlBigBed = urlBigBed;
+	}
+
+	public Integer getOrder()
+	{
+		return order;
+	}
+
+	public void setOrder(Integer order)
+	{
+		this.order = order;
 	}
 }

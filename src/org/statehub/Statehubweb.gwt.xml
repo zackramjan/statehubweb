@@ -8,6 +8,8 @@
 <module rename-to='statehubweb'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+   <!-- GXT Stylesheet -->
+ <stylesheet src="reset.css" />
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->

@@ -23,21 +23,50 @@
     <ui:attributes width="-1" height="1"  margins="{topFormMargins}" />
   </ui:with>
 
+  <ui:with type="com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer.HorizontalLayoutData" field="hlayout">
+    <ui:attributes width="1" height="20"/>
+  </ui:with>
+
+<ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="states">
+    <ui:attributes text="States for this Model" />
+  </ui:with>
+  <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="tracks">
+    <ui:attributes text="Tracks - download/view" />
+  </ui:with>
+
   <container:VerticalLayoutContainer>
     <container:child>
       <c:FramedPanel heading="modelName" ui:field="panel" layoutData="{verticalLayoutData}">
       	 <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="modelDetailsPanel" >
-			<g:Label text="hello" ui:field="nameLabel" stylePrimaryName="modelLabel" />	
-			<g:Label text="hello" ui:field="descLabel" stylePrimaryName="modelLabel" />
-			<g:Label text="hello" ui:field="idLabel" stylePrimaryName="modelLabel" />
+			<container:HorizontalLayoutContainer layoutData="{hlayout}">
+				<g:Label text="Author" stylePrimaryName="modelLabel" />
+				<g:Label text="hello" ui:field="nameLabel" stylePrimaryName="modelLabelText" />
+			</container:HorizontalLayoutContainer>	
+			
+			<container:HorizontalLayoutContainer  layoutData="{hlayout}">
+				<g:Label text="Description" stylePrimaryName="modelLabel" />
+				<g:Label text="hello" ui:field="descLabel" stylePrimaryName="modelLabelText" />
+			</container:HorizontalLayoutContainer>	
+			
+			<container:HorizontalLayoutContainer  layoutData="{hlayout}">
+				<g:Label text="TrackHub ID" stylePrimaryName="modelLabel" />
+				<g:Label text="hello" ui:field="idLabel" stylePrimaryName="modelLabelText" />
+			</container:HorizontalLayoutContainer>	
+			
 			<g:InlineHTML text="" ui:field="tagsLabel" stylePrimaryName="modelLabel" />			
        </container:VerticalLayoutContainer>
-       
       </c:FramedPanel>
     </container:child>
     <container:child>
-     <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="vlc" >
-       </container:VerticalLayoutContainer>
+      <c:PlainTabPanel ui:field="tabPanel" stylePrimaryName="tabpanel" >
+        <c:child config="{states}">
+          <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="statesGridPanel"/>
+        </c:child>
+ 
+        <c:child config="{tracks}">
+           <container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="tracksPanel"/>
+        </c:child>
+      </c:PlainTabPanel>
       </container:child>
   </container:VerticalLayoutContainer>
 		
