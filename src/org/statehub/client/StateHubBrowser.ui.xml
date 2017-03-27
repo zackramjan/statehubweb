@@ -67,7 +67,7 @@
         	<container:VerticalLayoutContainer layoutData="{verticalLayoutData}" ui:field="resultsVlc">
 				 <g:HTMLPanel>
 				 	<img src="statehubfig1.png"/><br/>
-				 	<h2 class="navText" >some description....</h2>
+				 	<h2 class="navText" >StateHub-StatePaintR: rules-based chromatin state annotations.</h2>
 				 </g:HTMLPanel>
 			</container:VerticalLayoutContainer>
 		</container:VerticalLayoutContainer>
