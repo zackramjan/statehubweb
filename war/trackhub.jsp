@@ -54,10 +54,10 @@ try
 		{
 			if(t.getGenome().equals(genomes))
 			{
-				s+="track " + t.getFilename().replace(" ","_").substring(0, t.getFilename().lastIndexOf(".",t.getFilename().lastIndexOf(".")-1))  + "\n";
-				s+="bigDataUrl " + t.getUrlBigBed()+ "\n";
-				s+="shortLabel " + t.getProject() + " " + t.getFilename().substring(0, t.getFilename().lastIndexOf(".",t.getFilename().lastIndexOf(".")-1))  + "\n";
-				s+="longLabel " + t.getFilename() + " " + t.getMark() + " " + t.getSegfile() + "\n";
+				s+="track " + t.getBedFileName().replace(" ","_").substring(0, t.getBedFileName().lastIndexOf(".",t.getBedFileName().lastIndexOf(".")-1))  + "\n";
+				s+="bigDataUrl " + t.getBigBedURL()+ "\n";
+				s+="shortLabel " + t.getName();
+				s+="longLabel " + t.getDescription();
 				s+="type bigBed\n";
 				s+="\n";
 				
