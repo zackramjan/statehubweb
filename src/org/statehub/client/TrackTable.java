@@ -22,8 +22,6 @@ import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.Store;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer.HorizontalLayoutData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
@@ -32,7 +30,7 @@ import com.sencha.gxt.widget.core.client.grid.CheckBoxSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.info.Info;
+//import com.sencha.gxt.widget.core.client.info.Info;
 
 public class TrackTable extends Composite
 {
@@ -99,12 +97,12 @@ public class TrackTable extends Composite
 		List<ColumnConfig<Track, ?>> columnDefs = new ArrayList<ColumnConfig<Track, ?>>();
 		IdentityValueProvider<Track> identity = new IdentityValueProvider<Track>();
 	      final CheckBoxSelectionModel<Track> selectionModel = new CheckBoxSelectionModel<Track>(identity);
-		ColumnConfig<Track, String> cc1 = new ColumnConfig<Track, String>(properties.filename(), 400, "Track");
+		ColumnConfig<Track, String> cc1 = new ColumnConfig<Track, String>(properties.name(), 400, "Track");
 		ColumnConfig<Track, String> cc2 = new ColumnConfig<Track, String>(properties.project(), 150, "Project");
 		ColumnConfig<Track, String> cc3 = new ColumnConfig<Track, String>(properties.genome(), 100, "Genome");
-		ColumnConfig<Track, String> cc4 = new ColumnConfig<Track, String>(properties.mark(), 100, "Mark");
-		ColumnConfig<Track, String> cc5 = new ColumnConfig<Track, String>(properties.segfile(), 100, "Seg file");
-		ColumnConfig<Track, String> cc6 = new ColumnConfig<Track, String>(properties.urlBed(), 100, "Get");
+		ColumnConfig<Track, String> cc4 = new ColumnConfig<Track, String>(properties.marksString(), 100, "Marks");
+		ColumnConfig<Track, String> cc5 = new ColumnConfig<Track, String>(properties.statePaintRVersion(), 100, "StatePaintR Version");
+		ColumnConfig<Track, String> cc6 = new ColumnConfig<Track, String>(properties.bedURL(), 100, "Get");
 		cc6.setCell(new SimpleSafeHtmlCell<String>(new AbstractSafeHtmlRenderer<String>() 
 			{
 			      public SafeHtml render(String url) 

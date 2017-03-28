@@ -162,11 +162,17 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			            	t.setOrder(i);
 			            	t.setGenome(p.subpath(2, 3).toString());
 			            	t.setProject(p.subpath(3, 4).toString());
-			            	t.setFilename(p.subpath(4, 5).toString());
-			            	t.setMark("unknown mark");
-			            	t.setSegfile("someSegFile");
-			            	t.setUrlBed(s3uri + objectSummary.getKey());
-			            	t.setUrlBigBed(s3uri + objectSummary.getKey().substring(0,objectSummary.getKey().toLowerCase().lastIndexOf("bed")) + "bb");
+			            	t.setBedFileName(p.subpath(4, 5).toString());
+			            	t.setName(t.getBedFileName());
+			            	t.setDescription(t.getBedFileName());
+			            	t.setModelID(id);
+			            	t.setStatePaintRVersion("0.0.0");
+			            	t.setBaseURL(s3uri + "/" + id + "/" + t.getGenome() + "/" + t.getProject() + "/" + t.getBedFileName());
+			            	ArrayList<String> marks = new ArrayList<String>();
+			            	marks.add("unspecified");
+			            	t.setMarks(marks);
+			            	t.setBedURL(s3uri + objectSummary.getKey());
+			            	t.setBigBedURL(s3uri + objectSummary.getKey().substring(0,objectSummary.getKey().toLowerCase().lastIndexOf("bed")) + "bb");
 			            	tracks.add(t);
 			            	System.out.println(i++ + " - " + t.toString());
 			            }
