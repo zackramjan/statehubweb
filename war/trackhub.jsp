@@ -56,8 +56,8 @@ try
 			{
 				s+="track " + t.getBedFileName().replace(" ","_").substring(0, t.getBedFileName().lastIndexOf(".",t.getBedFileName().lastIndexOf(".")-1))  + "\n";
 				s+="bigDataUrl " + t.getBigBedURL()+ "\n";
-				s+="shortLabel " + t.getName();
-				s+="longLabel " + t.getDescription();
+				s+="shortLabel " + t.getName()+"\n";
+				s+="longLabel " + t.getDescription()+"\n";
 				s+="type bigBed\n";
 				s+="\n";
 				
