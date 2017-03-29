@@ -88,8 +88,8 @@ public class TrackTable extends Composite
 		initWidget(uiBinder.createAndBindUi(this));
 		this.tracks = tracks;
 		renderTable();
-	
 	}
+
 	private void renderTable()
 	{
 		vlc.clear();
@@ -97,7 +97,7 @@ public class TrackTable extends Composite
 		List<ColumnConfig<Track, ?>> columnDefs = new ArrayList<ColumnConfig<Track, ?>>();
 		IdentityValueProvider<Track> identity = new IdentityValueProvider<Track>();
 	      final CheckBoxSelectionModel<Track> selectionModel = new CheckBoxSelectionModel<Track>(identity);
-		ColumnConfig<Track, String> cc1 = new ColumnConfig<Track, String>(properties.name(), 400, "Track");
+		ColumnConfig<Track, String> cc1 = new ColumnConfig<Track, String>(properties.name(), 400, "Track Name");
 		ColumnConfig<Track, String> cc2 = new ColumnConfig<Track, String>(properties.project(), 150, "Project");
 		ColumnConfig<Track, String> cc3 = new ColumnConfig<Track, String>(properties.genome(), 100, "Genome");
 		ColumnConfig<Track, String> cc4 = new ColumnConfig<Track, String>(properties.marksString(), 100, "Marks");
@@ -122,24 +122,11 @@ public class TrackTable extends Composite
 	    filter.bind(store);
 	    filter.setEmptyText("search tracks...");
 	    
-	    
-//	    HorizontalLayoutData hlayout = new HorizontalLayoutData();
-//	    hlayout.setHeight(30);
-//	    hlayout.setWidth(1.0);
-//	    HorizontalLayoutContainer hp = new HorizontalLayoutContainer();
 	    HorizontalPanel hp = new HorizontalPanel();
-//	    hp.setStylePrimaryName("tracksHeader");
-//	    hp.setLayoutData(hlayout);
-//	    hp.setHeight(30);
-//	    hp.setWidth(600);
 	    hp.add(filter);
 	    filter.setWidth(200);
-	       
-	    
 	    TextButton launchBrowser = new TextButton("View Selected Tracks on Genome Browser");
-	    
 	    launchBrowser.addSelectHandler(new SelectHandler(){
-	    
 			@Override
 			public void onSelect(SelectEvent event)
 			{
@@ -150,13 +137,10 @@ public class TrackTable extends Composite
 				String url = "http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://statehub.org/statehub/trackhub.jsp?id=" + id + "-" + selected;
 				//Info.display("launching Browser",url);
 				Window.open(url, "_blank", "");
-				
 			}});
 	    
 	    TextButton launchDir = new TextButton("Browse the Folder");
-	    
 	    launchDir.addSelectHandler(new SelectHandler(){
-	    
 			@Override
 			public void onSelect(SelectEvent event)
 			{
@@ -167,15 +151,11 @@ public class TrackTable extends Composite
 				String url = "http://statehub-trackhub.s3-website-us-west-2.amazonaws.com/?prefix=tracks/" + id;
 				//Info.display("launching Browser",url);
 				Window.open(url, "_blank", "");
-				
 			}});
-	    
 	    
 	    hp.add(launchBrowser);
 	    hp.add(launchDir);
 	    vlc.add(hp);
 	    vlc.add(grid);	    
 	}
-
-	
 }

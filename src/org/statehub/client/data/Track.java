@@ -42,11 +42,11 @@ public class Track implements Serializable
 	}
 	
 	public String getKey() {
-		return bedFileName;
+		return getBedURL();
 	}
 	
 	public void setKey(String key) {
-		this.bedFileName = key;
+		//nop;
 	}
 	
 	public String getMarksString()
