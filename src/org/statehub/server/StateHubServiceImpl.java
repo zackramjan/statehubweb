@@ -7,16 +7,14 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
 import org.bson.Document;
 import org.statehub.client.StateHubService;
 import org.statehub.client.data.Model;
 import org.statehub.client.data.Track;
+import org.statehub.client.data.TrackList;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
@@ -56,7 +54,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			String username = prop.getProperty("dbUser");
 			String password = prop.getProperty("dbPassword");
 			String database = prop.getProperty("dbName");
-			String collectionName = prop.getProperty("modelCollection");
+			String collectionName = prop.getProperty("modelsCollection");
 			MongoCredential credential = MongoCredential.createCredential(username, "admin", password.toCharArray());
 			MongoClient mongoClient = new MongoClient(new ServerAddress(prop.getProperty("dbServer")), Arrays.asList(credential));
 			MongoDatabase db = mongoClient.getDatabase(database);
@@ -102,7 +100,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			String username = prop.getProperty("dbUser");
 			String password = prop.getProperty("dbPassword");
 			String database = prop.getProperty("dbName");
-			String collectionName = prop.getProperty("modelCollection");
+			String collectionName = prop.getProperty("modelsCollection");
 			if(m.getRevision() == null)
 				m.setRevision(new Timestamp(new Date().getTime()));
 			MongoCredential credential = MongoCredential.createCredential(username, "admin", password.toCharArray());
@@ -144,6 +142,26 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if(prop.getProperty("useS3") != null && prop.getProperty("useS3").toLowerCase().equals("yes"))
+			return getTracksFromS3(id);
+		else
+			return getTracksFromMongo(id);
+		
+	}
+	
+	
+	public ArrayList<Track> getTracksFromS3(String id)
+	{
+		Properties prop = new Properties();
+		try
+		{
+			prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties"));
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String bucketName = prop.getProperty("s3bucket");
 		String s3uri = prop.getProperty("s3uri");
 		ArrayList<Track> tracks = new ArrayList<Track>();
@@ -171,12 +189,10 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			            	t.setDescription(t.getBedFileName());
 			            	t.setModelID(id);
 			            	t.setStatePaintRVersion("0.0.0");
-			            	t.setBaseURL(s3uri + "/" + id + "/" + t.getGenome() + "/" + t.getProject() + "/" + t.getBedFileName());
+			            	t.setBaseURL(s3uri + "/tracks");
 			            	ArrayList<String> marks = new ArrayList<String>();
 			            	marks.add("unspecified");
 			            	t.setMarks(marks);
-			            	t.setBedURL(s3uri + objectSummary.getKey());
-			            	t.setBigBedURL(s3uri + objectSummary.getKey().substring(0,objectSummary.getKey().toLowerCase().lastIndexOf("bed")) + "bb");
 			            	tracks.add(t);
 			            	System.out.println(i++ + " - " + t.toString());
 			            }
@@ -185,9 +201,6 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			} while (objectListing.isTruncated());
        return tracks;
 	}
-	
-	
-	
 	
 	public Integer storeEntireTrackDBToMongo(ArrayList<ArrayList<Track>> store)
 	{
@@ -198,7 +211,7 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			String username = prop.getProperty("dbUser");
 			String password = prop.getProperty("dbPassword");
 			String database = prop.getProperty("dbName");
-			String collectionName = prop.getProperty("trackCollection");
+			String collectionName = prop.getProperty("tracksCollection");
 			Gson gson = new Gson();
 
 			MongoCredential credential = MongoCredential.createCredential(username, "admin", password.toCharArray());
@@ -206,7 +219,13 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			MongoDatabase db = mongoClient.getDatabase(database);
 			MongoCollection<Document> collection = db.getCollection(collectionName);
 			for(ArrayList<Track> t : store)
-				collection.insertOne(Document.parse(gson.toJson(t)));
+			{
+				TrackList trackList = new TrackList();
+				trackList.setModelID(t.get(0).getModelID());
+				trackList.setTracks(t);
+				collection.insertOne(Document.parse(gson.toJson(trackList)));
+			}
+				
 			mongoClient.close();
 		} catch (Exception e)
 		{
@@ -215,8 +234,9 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 		return 0;
 	}
 
-	@Override
-	public ArrayList<Track> getTrackFromMongo(String id) {
+	
+
+	public ArrayList<Track> getTracksFromMongo(String id) {
 		
 		Properties prop = new Properties();
 		try
@@ -225,25 +245,26 @@ public class StateHubServiceImpl extends RemoteServiceServlet implements StateHu
 			String username = prop.getProperty("dbUser");
 			String password = prop.getProperty("dbPassword");
 			String database = prop.getProperty("dbName");
-			String collectionName = prop.getProperty("modelCollection");
+			String collectionName = prop.getProperty("tracksCollection");
 			MongoCredential credential = MongoCredential.createCredential(username, "admin", password.toCharArray());
 			MongoClient mongoClient = new MongoClient(new ServerAddress(prop.getProperty("dbServer")), Arrays.asList(credential));
 			MongoDatabase db = mongoClient.getDatabase(database);
 			MongoCollection<Document> collection = db.getCollection(collectionName);
-			System.err.println("getting all models");
+			System.err.println("getting all tracks for " + id  + " from mongo");
 			Gson gson = new Gson();
 			
 			
 			for (Document cur : collection.find()) 
 			{
-				ArrayList<Track> m = gson.fromJson(cur.toJson(),new TypeToken<ArrayList<Track>>(){}.getType());
-				if(m.size() > 0)
-					if(m.get(0).getModelID().equals(id))
-					{
-							mongoClient.close();
-							return m;
-					}
-									
+				TrackList t = gson.fromJson(cur.toJson(),TrackList.class);
+				if(t.getModelID().equals(id))
+				{
+					ArrayList<Track> m = t.getTracks();
+					mongoClient.close();
+					for(int i=0;i<m.size();i++)
+						m.get(i).setOrder(i+1);
+					return m;
+				}
 			}
 			mongoClient.close();
 			
