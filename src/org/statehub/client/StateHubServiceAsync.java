@@ -17,4 +17,5 @@ public interface StateHubServiceAsync
 		void toJson(Model m, AsyncCallback<String> callback);
 		void fromJson(String s, AsyncCallback<Model> callback);
 		void getTrack(String id, AsyncCallback<ArrayList<Track>> callback);
+		void getTrackFromMongo(String id, AsyncCallback<ArrayList<Track>> callback);
 }
