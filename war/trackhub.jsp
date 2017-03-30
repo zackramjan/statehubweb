@@ -58,7 +58,10 @@ try
 				s+="bigDataUrl " + t.getBigBedURL()+ "\n";
 				s+="shortLabel " + t.getName()+"\n";
 				s+="longLabel " + t.getDescription()+"\n";
-				s+="type bigBed\n";
+				s+="type bigBed 9\n";
+				s+="itemRgb on\n";
+				s+="labelOnFeature on\n";
+				s+="spectrum off\n";
 				s+="\n";
 				
 				
