@@ -58,6 +58,7 @@ try
 				s+="bigDataUrl " + t.getBigBedURL()+ "\n";
 				s+="shortLabel " + t.getName()+"\n";
 				s+="longLabel " + t.getDescription()+"\n";
+				s+="visibility dense\n";
 				s+="type bigBed 9\n";
 				s+="itemRgb on\n";
 				s+="labelOnFeature on\n";
