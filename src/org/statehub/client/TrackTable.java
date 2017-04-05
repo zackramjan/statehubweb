@@ -52,7 +52,10 @@ public class TrackTable extends Composite
 			@Override
 			protected boolean doSelect(Store<Track> store, Track parent,Track item, String filter) 
 			{
-				return item.toString().toLowerCase().contains(filter.toLowerCase());
+				boolean match = true;
+				for(String token : filter.split("\\s"))
+					match = match && item.toString().toLowerCase().contains(token.toLowerCase());
+				return match;				
 			}
 		 };
 
@@ -97,12 +100,13 @@ public class TrackTable extends Composite
 		List<ColumnConfig<Track, ?>> columnDefs = new ArrayList<ColumnConfig<Track, ?>>();
 		IdentityValueProvider<Track> identity = new IdentityValueProvider<Track>();
 	      final CheckBoxSelectionModel<Track> selectionModel = new CheckBoxSelectionModel<Track>(identity);
-		ColumnConfig<Track, String> cc1 = new ColumnConfig<Track, String>(properties.name(), 400, "Track Name");
-		ColumnConfig<Track, String> cc2 = new ColumnConfig<Track, String>(properties.project(), 150, "Project");
-		ColumnConfig<Track, String> cc3 = new ColumnConfig<Track, String>(properties.genome(), 100, "Genome");
-		ColumnConfig<Track, String> cc4 = new ColumnConfig<Track, String>(properties.marksString(), 100, "Marks");
-		ColumnConfig<Track, String> cc5 = new ColumnConfig<Track, String>(properties.statePaintRVersion(), 100, "StatePaintR Version");
-		ColumnConfig<Track, String> cc6 = new ColumnConfig<Track, String>(properties.bedURL(), 100, "Get");
+		ColumnConfig<Track, String> cc1 = new ColumnConfig<Track, String>(properties.name(), 250, "Track Name");
+		ColumnConfig<Track, String> cc15 = new ColumnConfig<Track, String>(properties.description(), 250, "Description");
+		ColumnConfig<Track, String> cc2 = new ColumnConfig<Track, String>(properties.project(), 90, "Project");
+		ColumnConfig<Track, String> cc3 = new ColumnConfig<Track, String>(properties.genome(), 90, "Genome");
+		ColumnConfig<Track, String> cc4 = new ColumnConfig<Track, String>(properties.marksString(), 150, "Marks");
+		ColumnConfig<Track, String> cc5 = new ColumnConfig<Track, String>(properties.statePaintRVersion(), 60, "StatePaintR Version");
+		ColumnConfig<Track, String> cc6 = new ColumnConfig<Track, String>(properties.bedURL(), 90, "Get");
 		cc6.setCell(new SimpleSafeHtmlCell<String>(new AbstractSafeHtmlRenderer<String>() 
 			{
 			      public SafeHtml render(String url) 
@@ -111,7 +115,7 @@ public class TrackTable extends Composite
 			      }
 			}));
 		
-		columnDefs.add(selectionModel.getColumn());columnDefs.add(cc1);columnDefs.add(cc2);columnDefs.add(cc3);columnDefs.add(cc4);columnDefs.add(cc5);columnDefs.add(cc6);
+		columnDefs.add(selectionModel.getColumn());columnDefs.add(cc1);columnDefs.add(cc15);columnDefs.add(cc2);columnDefs.add(cc3);columnDefs.add(cc4);columnDefs.add(cc5);columnDefs.add(cc6);
 		ColumnModel<Track> colModel = new ColumnModel<Track>(columnDefs);
 		grid = new Grid<Track>(store,colModel);
 		grid.setSelectionModel(selectionModel);
