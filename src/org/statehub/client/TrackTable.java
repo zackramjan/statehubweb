@@ -1,6 +1,7 @@
 package org.statehub.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.statehub.client.data.Track;
 import org.statehub.client.data.TrackModel;
@@ -135,10 +136,27 @@ public class TrackTable extends Composite
 			public void onSelect(SelectEvent event)
 			{
 				String selected = "";
+				HashMap<String,Integer> genomeCount = new HashMap<String,Integer>();
 				for(Track t : selectionModel.getSelectedItems())
+				{
 					selected +=t.getOrder() + "-";
+					if(!genomeCount.containsKey(t.getGenome()))
+						genomeCount.put(t.getGenome(), 1);
+					else
+						genomeCount.put(t.getGenome(),genomeCount.get(t.getGenome()+1));
+				}
+				String genome = "hg19";
+				int count = 0;
+				for (String key : genomeCount.keySet())
+				{
+					if(genomeCount.get(key) > count)
+					{
+						genome = key;
+						count = genomeCount.get(key);
+					}
+				}
 				selected = selected.substring(0, selected.length()-1);
-				String url = "http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://statehub.org/statehub/trackhub.jsp?id=" + id + "-" + selected;
+				String url = "http://genome.ucsc.edu/cgi-bin/hgTracks?db=" + genome + "&hubUrl=http://statehub.org/statehub/trackhub.jsp?id=" + id + "-" + selected;
 				//Info.display("launching Browser",url);
 				Window.open(url, "_blank", "");
 			}});
