@@ -141,12 +141,12 @@ public class TrackTable extends Composite
 				{
 					selected +=t.getOrder() + "-";
 					if(!genomeCount.containsKey(t.getGenome()))
-						genomeCount.put(t.getGenome(), 1);
+						genomeCount.put(t.getGenome(), new Integer(1));
 					else
-						genomeCount.put(t.getGenome(),genomeCount.get(t.getGenome()+1));
+						genomeCount.put(t.getGenome(),genomeCount.get(t.getGenome())+1);
 				}
 				String genome = "hg19";
-				int count = 0;
+				Integer count = new Integer(0);
 				for (String key : genomeCount.keySet())
 				{
 					if(genomeCount.get(key) > count)
@@ -156,7 +156,7 @@ public class TrackTable extends Composite
 					}
 				}
 				selected = selected.substring(0, selected.length()-1);
-				String url = "http://genome.ucsc.edu/cgi-bin/hgTracks?db=" + genome + "&hubUrl=http://statehub.org/statehub/trackhub.jsp?id=" + id + "-" + selected;
+				String url = "http://genome.ucsc.edu/cgi-bin/hgTracks?db="+ genome + "&hubUrl=http://statehub.org/statehub/trackhub.jsp?id=" + id + "-" + selected;
 				//Info.display("launching Browser",url);
 				Window.open(url, "_blank", "");
 			}});
