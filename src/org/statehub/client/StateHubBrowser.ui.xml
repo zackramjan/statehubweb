@@ -42,7 +42,7 @@
 <!--   </ui:with> -->
 
   <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
-    <ui:attributes width="1" height="1"  margins="{topFormMargins}" />
+    <ui:attributes width="1.0" height="1.0"  margins="{topFormMargins}" />
   </ui:with>
 
  <container:BorderLayoutContainer ui:field="borderLayout" stylePrimaryName="borderlayout" >

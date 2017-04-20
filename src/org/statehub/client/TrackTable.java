@@ -6,6 +6,8 @@ import java.util.List;
 import org.statehub.client.data.Track;
 import org.statehub.client.data.TrackModel;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.text.shared.AbstractSafeHtmlRenderer;
@@ -22,10 +24,15 @@ import com.sencha.gxt.cell.core.client.SimpleSafeHtmlCell;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.Store;
+import com.sencha.gxt.data.shared.Store.StoreFilter;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.FocusEvent;
+import com.sencha.gxt.widget.core.client.event.FocusEvent.FocusHandler;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.event.TriggerClickEvent;
+import com.sencha.gxt.widget.core.client.event.TriggerClickEvent.TriggerClickHandler;
 import com.sencha.gxt.widget.core.client.form.StoreFilterField;
 import com.sencha.gxt.widget.core.client.grid.CheckBoxSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
@@ -46,6 +53,7 @@ public class TrackTable extends Composite
 	Grid<Track> grid;
 	ListStore<Track> store=new ListStore<Track>(properties.key());
 	String id;
+	String searchText = "";
 	
 	//handle live filtering of metrics, match multiple properties against filter txt
 		StoreFilterField<Track> filter = new StoreFilterField<Track>() 
@@ -87,6 +95,36 @@ public class TrackTable extends Composite
 			}});
 		
 	}
+	
+	public TrackTable(String stateID,String search)
+	{
+		initWidget(uiBinder.createAndBindUi(this));
+		searchText = search;
+		Image progress = new Image("progress.gif");
+		progress.setHeight("200px");
+		progress.setWidth("200px");
+		
+		vlc.add(progress);
+		id=stateID;
+		statehubsvc.getTrack(stateID, new AsyncCallback<ArrayList<Track>>(){
+
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				vlc.clear();
+				vlc.add(new Label(caught.toString()));
+			}
+
+			@Override
+			public void onSuccess(ArrayList<Track> result)
+			{
+				tracks = result;
+				renderTable();
+			}});
+		
+	}
+	
+	
 	public TrackTable(ArrayList<Track> tracks)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
@@ -118,9 +156,23 @@ public class TrackTable extends Composite
 		
 		columnDefs.add(selectionModel.getColumn());columnDefs.add(cc1);columnDefs.add(cc15);columnDefs.add(cc2);columnDefs.add(cc3);columnDefs.add(cc4);columnDefs.add(cc5);columnDefs.add(cc6);
 		ColumnModel<Track> colModel = new ColumnModel<Track>(columnDefs);
+		
 		grid = new Grid<Track>(store,colModel);
+		com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler(){
+
+			@Override
+			public void onResize(ResizeEvent event)
+			{
+				grid.setHeight(Window.getClientHeight()-300 > 500 ? Window.getClientHeight()-300 : 500 );
+				grid.setWidth(Window.getClientWidth() - vlc.getAbsoluteLeft()-100);
+			}});
+		grid.setHeight(Window.getClientHeight()-300);
+		grid.setWidth(Window.getClientWidth()-400);
 		grid.setSelectionModel(selectionModel);
 		grid.getView().setAutoExpandColumn(cc1);
+		grid.getView().setAutoExpandColumn(cc4);
+		grid.getView().setAutoExpandMax(1000);
+		grid.getView().setAutoExpandMin(250);
 	    grid.getView().setStripeRows(true);
 	    grid.getView().setColumnLines(true);
 	    store.replaceAll(tracks);
@@ -177,6 +229,40 @@ public class TrackTable extends Composite
 	    
 	    hp.add(launchBrowser);
 	    hp.add(launchDir);
+	  
+	    
+	    if(searchText != null && searchText.length() > 0)
+	    {
+	       	filter.setText(searchText);
+	       	final StoreFilter<Track> searchFilter = new StoreFilter<Track>(){
+
+				@Override
+				public boolean select(Store<Track> store, Track parent, Track item) {
+					boolean match = true;
+					for(String token : searchText.split("\\s"))
+						match = match && item.toString().toLowerCase().contains(token.toLowerCase());
+					return match;
+				}};
+			store.addFilter(searchFilter);
+			store.setEnableFilters(true);
+			
+			  filter.addTriggerClickHandler(new TriggerClickHandler(){
+
+					@Override
+					public void onTriggerClick(TriggerClickEvent event) {
+						store.removeFilter(searchFilter);
+						
+					}});
+			  
+			  filter.addFocusHandler(new FocusHandler(){
+
+				@Override
+				public void onFocus(FocusEvent event) {
+					store.removeFilter(searchFilter);
+					
+				}});
+	    }
+	    	
 	    vlc.add(hp);
 	    vlc.add(grid);	    
 	}

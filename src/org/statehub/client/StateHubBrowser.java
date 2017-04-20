@@ -187,7 +187,7 @@ public class StateHubBrowser extends Composite
 					}});
 				back.setStylePrimaryName("backLabel");
 				resultsVlc.add(back);
-				resultsVlc.add(new ModelView(m));
+				resultsVlc.add(new ModelView(m,""));
 				
 			}});
 		rowExpander.initPlugin(grid);
@@ -220,7 +220,9 @@ public class StateHubBrowser extends Composite
 		progress.setHeight("200px");
 		progress.setWidth("200px");
 		resultsVlc.add(progress);
-		statehubsvc.getModel(searchText.getText(), new AsyncCallback<ArrayList<Model>>(){
+		//statehubsvc.getModel(searchText.getText(), new AsyncCallback<ArrayList<Model>>(){
+		//we get all model since we have few models in the db. search is used for tracks
+		statehubsvc.getModel("", new AsyncCallback<ArrayList<Model>>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -241,56 +243,56 @@ public class StateHubBrowser extends Composite
 					if(searchText.getText().length()>0)
 						resultsVlc.add(new ModelView(m,searchText.getText()));
 					else
-						resultsVlc.add(new ModelView(m));
+						resultsVlc.add(new ModelView(m,""));
 					//showModel(m);
 			}});
 
 	}
 //	@UiHandler("importButton")
-	public void importModel(SelectEvent event)
-	{
-		final FramedPanel f = new FramedPanel();
-		f.setHeading("Import a model from text");
-		VerticalLayoutContainer importVLC = new  VerticalLayoutContainer();
-		
-		final TextArea t = new TextArea();
-		t.setWidth(800);
-		t.setHeight(500);
-		f.setWidth(800);
-		t.setText("paste your text here");
-		importVLC.add(t);
-		TextButton doImportButton = new TextButton("import");
-		importVLC.add(doImportButton);
-		resultsVlc.clear();
-		resultsVlc.add(f);
-		f.add(importVLC);
-		doImportButton.addSelectHandler(new SelectHandler(){
-
-			@Override
-			public void onSelect(SelectEvent event) {
-				Model m = new Model();
-				m.parseFromString(t.getText());
-				showModel(m);
-				resultsVlc.remove(f);
-				statehubsvc.storeModel(m, new AsyncCallback<Integer>(){
-
-					@Override
-					public void onFailure(Throwable caught) {
-						Info.display("Error importing",caught.getMessage());
-					}
-
-					@Override
-					public void onSuccess(Integer result) {
-						Info.display("Success","Saved Model to DB");
-						
-					}});
-			}});
-	}
+//	public void importModel(SelectEvent event)
+//	{
+//		final FramedPanel f = new FramedPanel();
+//		f.setHeading("Import a model from text");
+//		VerticalLayoutContainer importVLC = new  VerticalLayoutContainer();
+//		
+//		final TextArea t = new TextArea();
+//		t.setWidth(800);
+//		t.setHeight(500);
+//		f.setWidth(800);
+//		t.setText("paste your text here");
+//		importVLC.add(t);
+//		TextButton doImportButton = new TextButton("import");
+//		importVLC.add(doImportButton);
+//		resultsVlc.clear();
+//		resultsVlc.add(f);
+//		f.add(importVLC);
+//		doImportButton.addSelectHandler(new SelectHandler(){
+//
+//			@Override
+//			public void onSelect(SelectEvent event) {
+//				Model m = new Model();
+//				m.parseFromString(t.getText());
+//				showModel(m);
+//				resultsVlc.remove(f);
+//				statehubsvc.storeModel(m, new AsyncCallback<Integer>(){
+//
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						Info.display("Error importing",caught.getMessage());
+//					}
+//
+//					@Override
+//					public void onSuccess(Integer result) {
+//						Info.display("Success","Saved Model to DB");
+//						
+//					}});
+//			}});
+//	}
 	
-	private void showModel(final Model m)
-	{
-		resultsVlc.add(new ModelView(m));
-	}
+//	private void showModel(final Model m)
+//	{
+//		resultsVlc.add(new ModelView(m));
+//	}
 	
 	private void insertNavFrame()
 	{

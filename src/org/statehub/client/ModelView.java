@@ -28,6 +28,7 @@ import com.sencha.gxt.data.shared.Store.StoreFilter;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.PlainTabPanel;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.ViewReadyEvent;
 import com.sencha.gxt.widget.core.client.event.ViewReadyEvent.ViewReadyHandler;
@@ -52,13 +53,14 @@ public class ModelView extends Composite
     @UiField Label descLabel;
     @UiField Label idLabel;
     @UiField InlineHTML tagsLabel;
-    //@UiField TabPanel tabPanel;
+    @UiField PlainTabPanel tabPanel;
 	private static final StateModel properties = GWT.create(StateModel.class);
 	private final StateHubServiceAsync statehubsvc = GWT.create(StateHubService.class);
 	ListStore<State> store=new ListStore<State>(properties.key());
 	StoreFilter<State> filter;
 	Grid<State> stateGrid; 
 	Model model;
+	String searchText;
 	Boolean isExpanded = false;
 	  RowExpander<State> rowExpander = new RowExpander<State>(new AbstractCell<State>() {
 	        @Override
@@ -70,11 +72,11 @@ public class ModelView extends Composite
 	      });
 	
 	
-	public ModelView(final Model model)
+	public ModelView(final Model model,final String search)
 	
 	{
 		initWidget(uiBinder.createAndBindUi(this));
-		
+		searchText = search;
 		this.model = model;
 		panel.setCollapsible(true);
 		panel.setBorders(false);
@@ -272,43 +274,52 @@ public class ModelView extends Composite
 		stateGrid = new Grid<State>(store,colModel);
 		rowExpander.initPlugin(stateGrid);
 		statesGridPanel.add(stateGrid);
-		tracksPanel.add(new TrackTable(model.getId()));
-		
-	}
-	public ModelView(Model model, final String search)
-	{
-		this(model);
-		filter = new StoreFilter<State>(){
-
-		@Override
-		public boolean select(Store<State> store, State parent, State item)
+		if(searchText != null && searchText.length() > 1)
 		{
-			String searchLower = search.toLowerCase();
-			Boolean found = 
-			item.getDescription().toLowerCase().contains(searchLower) ||
-			item.getName().toLowerCase().contains(searchLower) ||
-			item.getTags().toReadable().toLowerCase().contains(searchLower) ||
-			item.getFeaturesReadable().toLowerCase().contains(searchLower);
-			
-			//found = item.getName().toLowerCase().contains(searchLower);
-			return found;
-		}};
-		store.setEnableFilters(true);
-		store.addFilter(filter);
-		panel.collapse();
-		if(store.size()==0)
-		{
-			store.setEnableFilters(false);
-			return;
+			tracksPanel.add(new TrackTable(model.getId(),searchText));
+			tabPanel.setActiveWidget(tracksPanel);
 		}
+		else
+			tracksPanel.add(new TrackTable(model.getId()));
 		
-		stateGrid.addViewReadyHandler(new ViewReadyHandler(){
-
-			@Override
-			public void onViewReady(ViewReadyEvent event) {
-				for(int i =0; i<store.size();i++)
-					rowExpander.expandRow(i);
-				isExpanded = true;
-			}});
+		
 	}
+//	public ModelView(Model model, )
+//	{
+//		this(model);
+//		
+//		searchText = search;
+////		filter = new StoreFilter<State>(){
+////
+////		@Override
+////		public boolean select(Store<State> store, State parent, State item)
+////		{
+////			String searchLower = search.toLowerCase();
+////			Boolean found = 
+////			item.getDescription().toLowerCase().contains(searchLower) ||
+////			item.getName().toLowerCase().contains(searchLower) ||
+////			item.getTags().toReadable().toLowerCase().contains(searchLower) ||
+////			item.getFeaturesReadable().toLowerCase().contains(searchLower);
+////			
+////			//found = item.getName().toLowerCase().contains(searchLower);
+////			return found;
+////		}};
+////		store.setEnableFilters(true);
+////		store.addFilter(filter);
+////		panel.collapse();
+////		if(store.size()==0)
+////		{
+////			store.setEnableFilters(false);
+////			return;
+////		}
+////		
+////		stateGrid.addViewReadyHandler(new ViewReadyHandler(){
+////
+////			@Override
+////			public void onViewReady(ViewReadyEvent event) {
+////				for(int i =0; i<store.size();i++)
+////					rowExpander.expandRow(i);
+////				isExpanded = true;
+////			}});
+//	}
 }

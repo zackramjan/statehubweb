@@ -22,7 +22,7 @@
   <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="verticalLayoutData">
     <ui:attributes width="-1" height="1"  margins="{topFormMargins}" />
   </ui:with>
-
+  
   <ui:with type="com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer.HorizontalLayoutData" field="hlayout">
     <ui:attributes width="1" height="20"/>
   </ui:with>
